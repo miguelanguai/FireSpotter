@@ -33,6 +33,11 @@ body{
 #mainTitle{
     font-family:"formula1-display-regular";
 }
+#logoNasa{
+    position: absolute;
+    top:0;
+    left: 0;
+}
 #lowIcons{
     display: block;
     bottom: 0;
