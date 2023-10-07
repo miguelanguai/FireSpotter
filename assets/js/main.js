@@ -38,56 +38,7 @@ function addRedMarkers() {
     }
 }
 
-//Funcion para añadir las lineas a los marcadores con la orientacion que se nos de (45º hacia cada lado)
-function addRedMarkersWithLines(orientationDegrees, lengthInMeters) {
-    for (var i = 0; i < redPoints.length; i++) {
-        var redMarker = L.marker(redPoints[i], { icon: redIcon }).addTo(map);
 
-        // Dibujar una línea desde el marcador rojo
-        drawLinesWithSecondaryLines(redPoints[i], orientationDegrees, lengthInMeters);
-    }
-}
-
-function drawLinesWithSecondaryLines(startPoint, orientationDegrees, lengthInMeters) {
-    // Convertir la orientación de grados a radianes
-    var orientationRadians = (orientationDegrees * Math.PI) / 180;
-
-    // Calcular las coordenadas finales de la línea principal
-    var endLat = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadians);
-    var endLng = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadians);
-
-    // Crear un arreglo con las coordenadas de inicio y fin de la línea principal
-    var lineCoordinates = [startPoint, [endLat, endLng]];
-
-    // Dibujar la línea principal en el mapa
-    var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
-
-    // Dibujar 10 líneas hacia grados MENORES
-    for (var i = 1; i <= 10; i++) {
-        var orientationDegreesSideA = orientationDegrees - (i * 4.5);
-        var orientationRadiansSideA = (orientationDegreesSideA * Math.PI) / 180;
-        var endLatSideA = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideA);
-        var endLngSideA = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
-        var lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
-        var lineSideA = L.polyline(lineCoordinatesSideA, { color: 'black', weight: 0.25 }).addTo(map);
-    }
-
-    // Dibujar 10 líneas hacia grados MAYORES
-    for (var j = 1; j <= 10; j++) {
-        var orientationDegreesSideB = orientationDegrees + (j * 4.5);
-        var orientationRadiansSideB = (orientationDegreesSideB * Math.PI) / 180;
-        var endLatSideB = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideB);
-        var endLngSideB = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
-        var lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
-        var lineSideB = L.polyline(lineCoordinatesSideB, { color: 'black', weight: 0.25 }).addTo(map);
-    }
-}
-
-// Variables de orientación y de longitud(metros) (son de Ejempo)
-var orientationDegrees = 0;    // Orientación en grados
-var lengthInMeters = 1000;     // Longitud en metros
-//Llamar a la función que añade lineas a los puntos del mapa
-addRedMarkersWithLines(orientationDegrees, lengthInMeters);
 
 
 
