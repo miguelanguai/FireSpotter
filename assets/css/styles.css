@@ -36,6 +36,19 @@ body{
     top:0;
     left: 0;
 }
+#nasaImg{
+    width: 120px;
+}
+#logoWeb{
+    position: absolute;
+    top: 0;
+    right: 0;
+    
+}
+#webImg{
+    width: 140px;
+    border-radius: 100%;
+}
 #lowIcons{
     display: block;
     bottom: 0;
