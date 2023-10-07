@@ -60,10 +60,14 @@ body{
     height: 10%;
     align-items: center;
 }
-#scale{
-    width: 10%;
+#scale {
     position: absolute;
-    left: 2%;
+    bottom: 20px;
+    left: 50px;
+    background-color: white;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 #selfPosition{
     float: right;
