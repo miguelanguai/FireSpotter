@@ -12,9 +12,8 @@
 </head>
 
 <body>
-    <div id="map">
-        <!--Esta imagen va en toda la pantalla, en el fondo-->
-    </div>
+    <div id="map"></div>
+    <button id="getLocationButton">Obtener Ubicación</button>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         // Crear un mapa
@@ -28,8 +27,27 @@
         }).addTo(map);
  
  
-        // Puedes agregar marcadores, polígonos, rutas, etc. aquí
+        function showCurrentLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lng = position.coords.longitude;
+
+                    // Crear un marcador en la ubicación actual
+                    var marker = L.marker([lat, lng]).addTo(map);
+                    map.setView([lat, lng], 15); // Centrar el mapa en la ubicación actual
+                });
+            } else {
+                alert("Tu navegador no admite la geolocalización.");
+            }
+        }
+
+
+        // Agregar un controlador de eventos al botón
+        var getLocationButton = document.getElementById("getLocationButton");
+        getLocationButton.addEventListener("click", showCurrentLocation);
     </script>
+    
     <div id="title">
         <!--Esta barra de busqueda va arriba-->
         <!--Solucionar el margen del top que no cuadra bien-->
