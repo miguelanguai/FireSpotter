@@ -33,7 +33,6 @@
     <div id="lowIcons">
         <div id="scale">
             <!--este tiene que ser de color transparente-->
-            <p>aquiEscala</p>
         </div>
         <div id="selfPosition">
             <!--aqui va la posicion propia. Cuando lo tocamos, vuelve a ponernos en el centro del mapa-->
@@ -41,7 +40,6 @@
 
         </div>
     </div>
-    
 
 
     <script>
@@ -101,13 +99,15 @@
 
         //Llamar a la funcion que añade puntos en el mapa
         addRedMarkers();
+
+        // Añadir escala al mapa
+        var customScale = L.control.scale();
+        customScale.addTo(map);
+        
+        // Obtener el contenedor "scale" por su ID y agregar el control de escala
+        var scaleContainer = document.getElementById("scale");
+        scaleContainer.appendChild(customScale.getContainer());
     </script>
-    
-    
-    
-
-
-
 
 </body>
 
