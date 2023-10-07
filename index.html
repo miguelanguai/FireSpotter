@@ -42,12 +42,38 @@
             }
         }
 
+        // Coordenadas correspondientes a los puntos a añadir
+        var redPoints = [
+            [40.7128, -74.0060],
+            [40.7200, -73.9950],
+            [40.7300, -74.0100]
+        ];
+
+        // Función para agregar marcadores rojos en las coordenadas especificadas
+        function addRedMarkers() {
+            for (var i = 0; i < redPoints.length; i++) {
+                var redMarker = L.marker(redPoints[i], {icon: redIcon}).addTo(map);
+            }
+        }
+
+        // Crear un icono rojo personalizado para los marcadores
+        var redIcon = L.icon({
+            iconUrl: 'file:///home/hernan/Descargas/5a29e1a37a9239.5983790215126941795021.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
 
         // Agregar un controlador de eventos al botón
         var getLocationButton = document.getElementById("getLocationButton");
         getLocationButton.addEventListener("click", showCurrentLocation);
+
+        //Llamar a la funcion que añade puntos en el mapa
+        addRedMarkers();
     </script>
-    
+
     <div id="title">
         <!--Esta barra de busqueda va arriba-->
         <!--Solucionar el margen del top que no cuadra bien-->
