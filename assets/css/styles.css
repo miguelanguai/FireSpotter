@@ -12,8 +12,6 @@ body{
 }
 /*id*/
 #map{
-    background-color: brown;
-
     height: 100%;
     width: 100%;
     position: fixed;
@@ -32,6 +30,24 @@ body{
 }
 #mainTitle{
     font-family:"formula1-display-regular";
+}
+#logoNasa{
+    position: absolute;
+    top:0;
+    left: 0;
+}
+#nasaImg{
+    width: 120px;
+}
+#logoWeb{
+    position: absolute;
+    top: 0;
+    right: 0;
+    
+}
+#webImg{
+    width: 140px;
+    border-radius: 100%;
 }
 #lowIcons{
     display: block;
