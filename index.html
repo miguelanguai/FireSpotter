@@ -106,7 +106,7 @@
             var lineCoordinates = [startPoint, [endLat, endLng]];
 
             // Dibujar la línea principal en el mapa (orientación original)
-            var line = L.polyline(lineCoordinates, { color: 'black' }).addTo(map);
+            var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
             // Dibujar una línea 45 grados menor
             var orientationDegreesSideA = orientationDegrees - 45;
@@ -123,6 +123,11 @@
             var endLngSideB = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
             var lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
             var lineSideB = L.polyline(lineCoordinatesSideB, { color: 'black' }).addTo(map);
+
+
+            //9 lineas hacia grados MAYORES
+            //hacer bucle limite 10
+
         }
 
 
