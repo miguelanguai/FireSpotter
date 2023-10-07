@@ -40,6 +40,7 @@ body{
     background-color: yellow;
     position: absolute;
     width: 100%;
+    height: 10%;
 }
 #scale{
     display: inline;
