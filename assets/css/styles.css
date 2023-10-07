@@ -50,22 +50,34 @@ body{
     border-radius: 100%;
 }
 #lowIcons{
-    display: block;
+    display: flex;
     bottom: 0;
     left: 0;
-    background-color: yellow;
+    background-color: rgb(255, 255, 255, 0.5);
+    
     position: absolute;
     width: 100%;
     height: 10%;
+    align-items: center;
 }
 #scale{
-    display: inline;
     width: 10%;
     position: absolute;
+    left: 2%;
 }
 #selfPosition{
-    display: inline;
     float: right;
     width: 10%;
+    font-size: large;
+    position: absolute;
+    right: 2%;
+}
+#getLocationButton{
+    border-radius: 35px;
+    padding: 15px;
+}
+#getLocationButton:hover{
+    background-color: blue;
+    color: white;
 }
 /*clases*/

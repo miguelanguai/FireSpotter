@@ -13,8 +13,37 @@
 
 <body>
     <div id="map"></div>
-    <button id="getLocationButton">Obtener Ubicación</button>
+    
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    
+    <div id="title">
+        <!--Esta barra de busqueda va arriba-->
+        <!--Solucionar el margen del top que no cuadra bien-->
+        <h1 id="mainTitle">FireSpotter</h1>
+    </div>
+    <div id="logoNasa">
+        <img src="/assets/img/nasa_logo.png" alt="logo of Corp" id="nasaImg">
+    </div>
+
+    <div id="logoWeb">
+        <img src="/assets/img/logoWeb.jpeg" alt="logo of our Web" id="webImg">
+    </div>
+    
+    <div id="lowIcons">
+        <div id="scale">
+            <!--este tiene que ser de color transparente-->
+            <p>aquiEscala</p>
+        </div>
+        <div id="selfPosition">
+            <!--aqui va la posicion propia. Cuando lo tocamos, vuelve a ponernos en el centro del mapa-->
+            <button id="getLocationButton">Obtener Ubicación</button>
+
+        </div>
+    </div>
+    
+
+
     <script>
         // Crear un mapa
         var map = L.map('map').setView([40.41831, -3.70275], 6);
@@ -47,35 +76,6 @@
         var getLocationButton = document.getElementById("getLocationButton");
         getLocationButton.addEventListener("click", showCurrentLocation);
     </script>
-    
-    <div id="title">
-        <!--Esta barra de busqueda va arriba-->
-        <!--Solucionar el margen del top que no cuadra bien-->
-        <h1 id="mainTitle">FireSpotter</h1>
-    </div>
-    <div id="logoNasa">
-        <img src="/assets/img/nasa_logo.png" alt="logo of Corp" id="nasaImg">
-    </div>
-
-    <div id="logoWeb">
-        <img src="/assets/img/logoWeb.jpeg" alt="logo of our Web" id="webImg">
-    </div>
-    
-    <div id="lowIcons">
-        <div id="scale">
-            <!--este tiene que ser de color transparente-->
-            <p>aquiEscala</p>
-        </div>
-        <div id="selfPosition">
-            <!--aqui va la posicion propia. Cuando lo tocamos, vuelve a ponernos en el centro del mapa-->
-            <p>aquiPosicionota</p>
-
-        </div>
-    </div>
-    
-
-
-
 
 </body>
 
