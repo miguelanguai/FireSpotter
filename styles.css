@@ -47,6 +47,9 @@ body{
     display: inline;
     width: 10%;
     position: absolute;
+    background-color: rgb(219, 219, 219);
+    border: 2px solid rgb(191, 191, 191);
+    border-radius:35px ;
 }
 #selfPosition{
     display: inline;
