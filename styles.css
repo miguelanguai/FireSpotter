@@ -39,7 +39,7 @@ body{
     display: block;
     bottom: 0;
     left: 0;
-    background-color: yellow;
+    background-color: red;
     position: absolute;
     width: 100%;
 }
