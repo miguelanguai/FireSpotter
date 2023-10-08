@@ -69,26 +69,66 @@
             var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
             //grado inclinacion
-            var inclinationDegree = 1;
+            var inclinationDegree = 0.45;
+
+            //creo array de colores 
+            //var colors = ["red", "orange", "yellow", "green", "blue"];
+            //puede que no sea necesario este array
 
             // Dibujar 10 líneas hacia grados MENORES
-            for (var i = 1; i <= 45; i++) {
+            for (var i = 1; i <= 100; i++) {
+                //se inicializa el valor color
+                var lineColor = 'black';
+
+                //aqui se cambia el color cada 20
+                if (i <= 20) {
+                    lineColor = 'red';
+                } else if (i <= 40) {
+                    lineColor = 'orange';
+                } else if (i <= 60) {
+                    lineColor = 'yellow';
+                } else if (i <= 80) {
+                    lineColor = 'green';
+                } else if (i <= 100) {
+                    lineColor = 'blue';
+                } else {
+                    lineColor = 'brown';
+                }
+
                 var orientationDegreesSideA = orientationDegrees - (i * inclinationDegree);
                 var orientationRadiansSideA = (orientationDegreesSideA * Math.PI) / 180;
                 var endLatSideA = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideA);
                 var endLngSideA = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
                 var lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
-                var lineSideA = L.polyline(lineCoordinatesSideA, { color: 'black', weight: 0.25 }).addTo(map);
+                var lineSideA = L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
             }
 
             // Dibujar 10 líneas hacia grados MAYORES
-            for (var j = 1; j <= 45; j++) {
+            for (var j = 1; j <= 100; j++) {
+                //se inicializa el valor color
+                var lineColor = 'black';
+
+                //aqui se cambia el color cada 20
+                if (j <= 20) {
+                    lineColor = 'red';
+                } else if (j <= 40) {
+                    lineColor = 'orange';
+                } else if (j <= 60) {
+                    lineColor = 'yellow';
+                } else if (j <= 80) {
+                    lineColor = 'green';
+                } else if (j <= 100) {
+                    lineColor = 'blue';
+                } else {
+                    lineColor = 'brown';
+                }
+
                 var orientationDegreesSideB = orientationDegrees + (j * inclinationDegree);
                 var orientationRadiansSideB = (orientationDegreesSideB * Math.PI) / 180;
                 var endLatSideB = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideB);
                 var endLngSideB = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
                 var lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
-                var lineSideB = L.polyline(lineCoordinatesSideB, { color: 'black', weight: 0.25 }).addTo(map);
+                var lineSideB = L.polyline(lineCoordinatesSideB, { color: lineColor, weight: 0.25 }).addTo(map);
             }
         }
 
