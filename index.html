@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Mapa</title>
+    <title>FireSpotter</title>
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
@@ -43,7 +43,9 @@
 
     <script>
         //Funcion para añadir las lineas a los marcadores con la orientacion que se nos de (45º hacia cada lado)
-        function addRedMarkersWithLines(data) {
+        async function addRedMarkersWithLines() {
+            const data = await getData();
+
             for (var i = 0; i < data.length; i++) {
                 const point = data[i];
                 L.marker([point.latitud, point.longitud], { icon: redIcon }).addTo(map);
@@ -135,14 +137,7 @@
             }
         }
 
-        async function getDataTest() {
-            const data = await getData();
-            console.log(data);
-            addRedMarkersWithLines(data);
-        }
-
-        getDataTest();
-
+        addRedMarkersWithLines();
     </script>
 </body>
 
