@@ -43,9 +43,9 @@
 
     <script>
         //Funcion para añadir las lineas a los marcadores con la orientacion que se nos de (45º hacia cada lado)
-        function addRedMarkersWithLines() {
-            for (var i = 0; i < redPoints.length; i++) {
-                const point = redPoints[i];
+        function addRedMarkersWithLines(data) {
+            for (var i = 0; i < data.length; i++) {
+                const point = data[i];
                 L.marker([point.latitud, point.longitud], { icon: redIcon }).addTo(map);
 
                 // Dibujar una línea desde el marcador rojo
@@ -54,7 +54,11 @@
         }
 
         function drawLinesWithSecondaryLines(point) {
-            const { latitud, longitud, windDeg, firePropagation } = point;
+            let { latitud, longitud, windDeg, firePropagation } = point;
+
+            const iniValue = () => (-1 * (windDeg)) + 90; // Cambiado a resta para hacerlo anti-horario
+
+            windDeg = iniValue();
 
             const startPoint = [latitud, longitud];
 
@@ -71,15 +75,15 @@
             // Dibujar la línea principal en el mapa
             var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
-            //grado inclinacion
+            // Grado inclinación
             const inclinationDegree = 0.45;
 
-            // Dibujar 10 líneas hacia grados MENORES
+            // Dibujar 10 líneas hacia grados MAYORES (anti-horario)
             for (var i = 1; i <= 100; i++) {
-                //se inicializa el valor color
+                // Se inicializa el valor color
                 var lineColor = 'black';
 
-                //aqui se cambia el color cada 20
+                // Aquí se cambia el color cada 20
                 if (i <= 20) {
                     lineColor = 'red';
                 } else if (i <= 40) {
@@ -94,7 +98,7 @@
                     lineColor = 'brown';
                 }
 
-                var windDegSideA = windDeg - (i * inclinationDegree);
+                var windDegSideA = windDeg + (i * inclinationDegree);
                 var orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
                 var endLatSideA = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
                 var endLngSideA = longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
@@ -102,12 +106,12 @@
                 var lineSideA = L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
             }
 
-            // Dibujar 10 líneas hacia grados MAYORES
+            // Dibujar 10 líneas hacia grados MENORES (anti-horario)
             for (var j = 1; j <= 100; j++) {
-                //se inicializa el valor color
+                // Se inicializa el valor color
                 var lineColor = 'black';
 
-                //aqui se cambia el color cada 20
+                // Aquí se cambia el color cada 20
                 if (j <= 20) {
                     lineColor = 'red';
                 } else if (j <= 40) {
@@ -122,7 +126,7 @@
                     lineColor = 'brown';
                 }
 
-                var windDegSideB = windDeg + (j * inclinationDegree);
+                var windDegSideB = windDeg - (j * inclinationDegree);
                 var orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
                 var endLatSideB = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
                 var endLngSideB = longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
@@ -131,12 +135,15 @@
             }
         }
 
-        
-        //Llamar a la función que añade lineas a los puntos del mapa
-        addRedMarkersWithLines();
+        async function getDataTest() {
+            const data = await getData();
+            console.log(data);
+            addRedMarkersWithLines(data);
+        }
+
+        getDataTest();
 
     </script>
-
 </body>
 
 </html>
