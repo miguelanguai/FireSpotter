@@ -3,13 +3,11 @@ var map = L.map('map', {
     zoomControl: false
 }).setView([40.41831, -3.70275], 6);
 
-
 // Agregar una capa de mapa físico
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
-
 
 function showCurrentLocation() {
     if ("geolocation" in navigator) {
@@ -28,7 +26,7 @@ function showCurrentLocation() {
 
 // Crear un icono rojo personalizado para los marcadores
 var redIcon = L.icon({
-    iconUrl: '/assets/img/fueguito.png',
+    iconUrl: 'assets/img/fueguito.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
