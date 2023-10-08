@@ -52,7 +52,7 @@ let fecha = new Date();
 let year = fecha.getFullYear();
 let month = String(fecha.getMonth() + 1).padStart(2, "0");
 let day = String(fecha.getDate()).padStart(2, "0");
-let today = `${year}-${month}-${7}`;
+let today = `${year}-${month}-${day}`;
 const firmsURL = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${today}`;
 const openWeatherURL = (lat, lon) =>
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=efd53a1ca3bae9d1aae362ddf19cbbeb`;
@@ -166,55 +166,4 @@ async function getData() {
 
     return coordenadas;
 }
-
-let redPoints = [
-    {
-        latitud: 42.49564,
-        longitud: -8.40572,
-        windDeg: 117,
-        firePropagation: 57.278930162282585
-    },
-    {
-        latitud: 41.24447,
-        longitud: -8.13209,
-        windDeg: 91,
-        firePropagation: 1.5993208823230984
-    },
-    {
-        latitud: 39.93742,
-        longitud: -4.11343,
-        windDeg: 93,
-        firePropagation: 18.041942652413482
-    },
-    {
-        latitud: 41.29595,
-        longitud: -8.57903,
-        windDeg: 140,
-        firePropagation: 177.2957689207814
-    },
-    {
-        latitud: 41.29778,
-        longitud: -8.56003,
-        windDeg: 140,
-        firePropagation: 181.792400741236
-    },
-    {
-        latitud: 39.13458,
-        longitud: -6.85553,
-        windDeg: 48,
-        firePropagation: 264.8938911033144
-    },
-    {
-        latitud: 41.49329,
-        longitud: -8.10431,
-        windDeg: 89,
-        firePropagation: 1283.6012205625782
-    },
-    {
-        latitud: 41.49518,
-        longitud: -8.0922,
-        windDeg: 88,
-        firePropagation: 1281.1499063684598
-    }
-];
 
