@@ -9,8 +9,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+var currentLocationIsShown = false;
+
 function showCurrentLocation() {
-    if ("geolocation" in navigator) {
+    if ("geolocation" in navigator&&currentLocationIsShown==false) {
         navigator.geolocation.getCurrentPosition(function (position) {
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
@@ -18,8 +20,13 @@ function showCurrentLocation() {
             // Crear un marcador en la ubicación actual
             var marker = L.marker([lat, lng]).addTo(map);
             map.setView([lat, lng], 15); // Centrar el mapa en la ubicación actual
+            currentLocationIsShown=true;
         });
-    } else {
+    } else if(currentLocationIsShown==true){
+        map.setView([40.41831, -3.70275], 6);
+        currentLocationIsShown=false;
+    }
+    else {
         alert("Tu navegador no admite la geolocalización.");
     }
 }
