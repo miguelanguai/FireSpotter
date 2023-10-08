@@ -150,13 +150,13 @@ async function getData() {
 
             let kFuel;
             if (deg > 45 && deg < 135)
-                kFuel = kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][0]);
-            else if (deg > 135 && deg < 225)
                 kFuel = kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][2]);
-            else if (deg > 225 && deg < 315)
+            else if (deg > 135 && deg < 225)
                 kFuel = kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][1]);
-            else if (deg > 315 && deg < 45)
+            else if (deg > 225 && deg < 315)
                 kFuel = kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][3]);
+            else if (deg > 315 && deg < 45)
+                kFuel = kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][0]);
             else kFuel = kFc;
 
             const firePropagation =
