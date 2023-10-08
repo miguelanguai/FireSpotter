@@ -1,5 +1,7 @@
 // Crear un mapa
-var map = L.map('map').setView([40.41831, -3.70275], 6);
+var map = L.map('map', {
+    zoomControl: false 
+}).setView([40.41831, -3.70275], 6);
 
 
 // Agregar una capa de mapa físico
