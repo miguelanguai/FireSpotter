@@ -60,10 +60,19 @@ body{
     height: 10%;
     align-items: center;
 }
+#caption{
+    position:absolute;
+    bottom: 7px;
+    left:10px;
+}
+#captionImage{
+    width: 200px;
+}
+
 #scale {
     position: absolute;
     bottom: 20px;
-    left: 50px;
+    left: 45%;
     background-color: white;
     padding: 5px 10px;
     border: 1px solid #ccc;
