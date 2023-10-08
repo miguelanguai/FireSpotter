@@ -58,7 +58,7 @@
         function drawLinesWithSecondaryLines(point) {
             let { latitud, longitud, windDeg, firePropagation } = point;
 
-            const iniValue = () => (-1 * (windDeg)) + 90; // Cambiado a resta para hacerlo anti-horario
+            const iniValue = () => -1 * (windDeg); // Cambiado a resta para hacerlo anti-horario
 
             windDeg = iniValue();
 
