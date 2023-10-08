@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,65 +8,56 @@
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="icon" href="assets/img/logoFirefighter.ico" type="image/x-icon">
-
 </head>
-
 <body>
     <div id="map"></div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-
-    
     <div id="logoNasa">
-        <img src="assets/img/nasa_logo.png" alt="logo of Corp" id="nasaImg">
+        <img src="assets/img/nasa_logo.png" alt="NASA logo" id="nasaImg">
     </div>
 
     <div id="logoWeb">
-        <img src="assets/img/logoFirefighter.jpg" alt="logo of our Web" id="webImg">
+        <img src="assets/img/logoFirefighter.jpg" alt="Web logo" id="webImg">
     </div>
 
     <div id="lowIcons">
         <div id="caption">
-            <img src="assets/img/leyendaColores.png" alt="explicacion probabilidad colores" id="captionImage">
+            <img src="assets/img/leyendaColores.png" alt="Explanation of color probabilities" id="captionImage">
         </div>
         <div id="scale">
-            <!--este tiene que ser de color transparente-->
+            <!-- Este debe ser de color transparente -->
         </div>
         <div id="selfPosition">
-            <!--aqui va la posicion propia. Cuando lo tocamos, vuelve a ponernos en el centro del mapa-->
+            <!-- Aquí va la posición propia. Cuando se toca, vuelve a poner en el centro del mapa -->
             <button id="getLocationButton">Obtener Ubicación</button>
-
         </div>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="assets/js/main.js"></script>
-
     <script>
-        //Funcion para añadir las lineas a los marcadores con la orientacion que se nos de (45º hacia cada lado)
-        async function addRedMarkersWithLines() {
+        // Función para añadir los marcadores rojos con líneas
+        async function addFireMarkersAndLines() {
             const data = await getData();
 
             for (var i = 0; i < data.length; i++) {
                 const point = data[i];
                 L.marker([point.latitud, point.longitud], { icon: redIcon }).addTo(map);
 
-                // Dibujar una línea desde el marcador rojo
+                // Dibujar líneas desde el marcador rojo
                 drawLinesWithSecondaryLines(point);
             }
         }
 
+        // Función para dibujar líneas desde el marcador rojo
         function drawLinesWithSecondaryLines(point) {
             let { latitud, longitud, windDeg, firePropagation } = point;
 
             const iniValue = () => -1 * (windDeg + 23.5); // Cambiado a resta para hacerlo anti-horario
-
             windDeg = iniValue();
 
             const startPoint = [latitud, longitud];
-
-            // Convertir la orientación de grados a radianes
-            var orientationRadians = (windDeg * Math.PI) / 180;
+            const orientationRadians = (windDeg * Math.PI) / 180;
 
             // Calcular las coordenadas finales de la línea principal
             var endLat = latitud + (firePropagation / 111320) * Math.cos(orientationRadians);
@@ -79,29 +69,12 @@
             // Dibujar la línea principal en el mapa
             var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
-            // Grado inclinación
+            // Grado de inclinación
             const inclinationDegree = 0.45;
 
-            // Dibujar 10 líneas hacia grados MAYORES (anti-horario)
+            // Dibujar 100 líneas hacia grados MAYORES (anti-horario)
             for (var i = 1; i <= 100; i++) {
-                // Se inicializa el valor color
-                var lineColor = 'black';
-
-                // Aquí se cambia el color cada 20
-                if (i <= 20) {
-                    lineColor = 'red';
-                } else if (i <= 40) {
-                    lineColor = 'orange';
-                } else if (i <= 60) {
-                    lineColor = 'yellow';
-                } else if (i <= 80) {
-                    lineColor = 'green';
-                } else if (i <= 100) {
-                    lineColor = 'blue';
-                } else {
-                    lineColor = 'brown';
-                }
-
+                var lineColor = getColorForLine(i);
                 var windDegSideA = windDeg + (i * inclinationDegree);
                 var orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
                 var endLatSideA = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
@@ -112,24 +85,7 @@
 
             // Dibujar 10 líneas hacia grados MENORES (anti-horario)
             for (var j = 1; j <= 100; j++) {
-                // Se inicializa el valor color
-                var lineColor = 'black';
-
-                // Aquí se cambia el color cada 20
-                if (j <= 20) {
-                    lineColor = 'red';
-                } else if (j <= 40) {
-                    lineColor = 'orange';
-                } else if (j <= 60) {
-                    lineColor = 'yellow';
-                } else if (j <= 80) {
-                    lineColor = 'green';
-                } else if (j <= 100) {
-                    lineColor = 'blue';
-                } else {
-                    lineColor = 'brown';
-                }
-
+                var lineColor = getColorForLine(j);
                 var windDegSideB = windDeg - (j * inclinationDegree);
                 var orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
                 var endLatSideB = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
@@ -139,8 +95,13 @@
             }
         }
 
-        addRedMarkersWithLines();
+        // Función para obtener el color de la línea según el índice
+        function getColorForLine(index) {
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
+            return colors[Math.floor(index / 20)] || 'black';
+        }
+
+        addFireMarkersAndLines();
     </script>
 </body>
-
 </html>
