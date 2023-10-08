@@ -73,7 +73,9 @@ body{
     color: white;
 }
 /*clases*/
-@media{
+
+/*media*/
+@media(max-width: 768px){
     #title{
         overflow: hidden;
     }
