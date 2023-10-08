@@ -28,9 +28,8 @@ function showCurrentLocation() {
 
 // Coordenadas correspondientes a los puntos a añadir
 var redPoints = [
-    [39.692678, -0.468424],
-    [39.702761, -0.479010],
-    [39.723044, -0.455240]
+    //probando con los datos de Tenerife
+    [28.383562, -16.597461]
 ];
 
 // Función para agregar marcadores rojos en las coordenadas especificadas
