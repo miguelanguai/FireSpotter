@@ -1,11 +1,3 @@
-/*fuentes*/
-@font-face {
-    font-family: "formula1-display-regular";
-    src: url("https://candyfonts.com/wp-data/2018/10/26/11543/Formula1-Regular_web_0.ttf") format("woff"),
-    url("https://candyfonts.com/wp-data/2018/10/26/11543/Formula1-Regular_web_0.ttf") format("opentype"),
-    url("https://candyfonts.com/wp-data/2018/10/26/11543/Formula1-Regular_web_0.ttf") format("truetype");
-}
-
 /*elementos html*/
 body{
     margin: 0;
