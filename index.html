@@ -8,7 +8,6 @@
     <title>Mapa</title>
     <link rel="stylesheet" type="text/css" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="assets/js/main.js">
 </head>
 
 <body>
@@ -48,22 +47,27 @@
 
     <script>
         //Funcion para añadir las lineas a los marcadores con la orientacion que se nos de (45º hacia cada lado)
-        function addRedMarkersWithLines(orientationDegrees, lengthInMeters) {
+        function addRedMarkersWithLines() {
             for (var i = 0; i < redPoints.length; i++) {
-                var redMarker = L.marker(redPoints[i], { icon: redIcon }).addTo(map);
+                const point = redPoints[i];
+                L.marker([point.latitud, point.longitud], { icon: redIcon }).addTo(map);
 
                 // Dibujar una línea desde el marcador rojo
-                drawLinesWithSecondaryLines(redPoints[i], orientationDegrees, lengthInMeters);
+                drawLinesWithSecondaryLines(point);
             }
         }
 
-        function drawLinesWithSecondaryLines(startPoint, orientationDegrees, lengthInMeters) {
+        function drawLinesWithSecondaryLines(point) {
+            const { latitud, longitud, windDeg, firePropagation } = point;
+
+            const startPoint = [latitud, longitud];
+
             // Convertir la orientación de grados a radianes
-            var orientationRadians = (orientationDegrees * Math.PI) / 180;
+            var orientationRadians = (windDeg * Math.PI) / 180;
 
             // Calcular las coordenadas finales de la línea principal
-            var endLat = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadians);
-            var endLng = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadians);
+            var endLat = latitud + (firePropagation / 111320) * Math.cos(orientationRadians);
+            var endLng = longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadians);
 
             // Crear un arreglo con las coordenadas de inicio y fin de la línea principal
             var lineCoordinates = [startPoint, [endLat, endLng]];
@@ -72,11 +76,7 @@
             var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
             //grado inclinacion
-            var inclinationDegree = 0.45;
-
-            //creo array de colores 
-            //var colors = ["red", "orange", "yellow", "green", "blue"];
-            //puede que no sea necesario este array
+            const inclinationDegree = 0.45;
 
             // Dibujar 10 líneas hacia grados MENORES
             for (var i = 1; i <= 100; i++) {
@@ -98,10 +98,10 @@
                     lineColor = 'brown';
                 }
 
-                var orientationDegreesSideA = orientationDegrees - (i * inclinationDegree);
-                var orientationRadiansSideA = (orientationDegreesSideA * Math.PI) / 180;
-                var endLatSideA = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideA);
-                var endLngSideA = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
+                var windDegSideA = windDeg - (i * inclinationDegree);
+                var orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
+                var endLatSideA = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
+                var endLngSideA = longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
                 var lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
                 var lineSideA = L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
             }
@@ -126,20 +126,17 @@
                     lineColor = 'brown';
                 }
 
-                var orientationDegreesSideB = orientationDegrees + (j * inclinationDegree);
-                var orientationRadiansSideB = (orientationDegreesSideB * Math.PI) / 180;
-                var endLatSideB = startPoint[0] + (lengthInMeters / 111320) * Math.cos(orientationRadiansSideB);
-                var endLngSideB = startPoint[1] + (lengthInMeters / (111320 * Math.cos(startPoint[0] * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
+                var windDegSideB = windDeg + (j * inclinationDegree);
+                var orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
+                var endLatSideB = latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
+                var endLngSideB = longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
                 var lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
                 var lineSideB = L.polyline(lineCoordinatesSideB, { color: lineColor, weight: 0.25 }).addTo(map);
             }
         }
-
-        // Variables de orientación y de longitud(metros) (son de Ejempo)
-        var orientationDegrees = 0;    // Orientación en grados
-        var lengthInMeters = 1000;     // Longitud en metros
+        
         //Llamar a la función que añade lineas a los puntos del mapa
-        addRedMarkersWithLines(orientationDegrees, lengthInMeters);
+        addRedMarkersWithLines();
     </script>
 
 </body>
