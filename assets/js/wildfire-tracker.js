@@ -1,66 +1,21 @@
-// Crear un mapa
-var map = L.map('map', {
-    zoomControl: false
-}).setView([40.41831, -3.70275], 6);
-
-// Agregar una capa de mapa físico
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-var currentLocationIsShown = false;
-
-function showCurrentLocation() {
-    if ("geolocation" in navigator&&currentLocationIsShown==false) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-
-            // Crear un marcador en la ubicación actual
-            var marker = L.marker([lat, lng]).addTo(map);
-            map.setView([lat, lng], 15); // Centrar el mapa en la ubicación actual
-            currentLocationIsShown=true;
-        });
-    } else if(currentLocationIsShown==true){
-        map.setView([40.41831, -3.70275], 6);
-        currentLocationIsShown=false;
-    }
-    else {
-        alert("Tu navegador no admite la geolocalización.");
-    }
-}
-
-// Crear un icono rojo personalizado para los marcadores
-var redIcon = L.icon({
-    iconUrl: 'assets/img/fueguito.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
-
-// Agregar un controlador de eventos al botón
-var getLocationButton = document.getElementById("getLocationButton");
-getLocationButton.addEventListener("click", showCurrentLocation);
-
-// Añadir escala al mapa
-var customScale = L.control.scale();
-customScale.addTo(map);
-
-// Obtener el contenedor "scale" por su ID y agregar el control de escala
-var scaleContainer = document.getElementById("scale");
-scaleContainer.appendChild(customScale.getContainer());
-
-/*
-    CODIGO API
+/**
+ * URL for retrieving CSV data from the NASA FIRMS API for a specific date.
+ * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current day.
 */
-let fecha = new Date();
-let year = fecha.getFullYear();
-let month = String(fecha.getMonth() + 1).padStart(2, "0");
-let day = String(fecha.getDate()).padStart(2, "0");
-let today = `${year}-${month}-${day}`;
-const firmsURL = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${today}`;
+const firmsURL = (date) => {
+    if (date === undefined) {
+        const fecha = new Date();
+        const year = fecha.getFullYear();
+        const month = String(fecha.getMonth() + 1).padStart(2, "0");
+        const day = String(fecha.getDate()).padStart(2, "0");
+        
+        date = `${year}-${month}-${day}`;
+    };
+
+    return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${date}`;
+};
+
+/** URL for retrieving weather data based on latitude and longitude coordinates from OPEN WEATHER API. */
 const openWeatherURL = (lat, lon) =>
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=efd53a1ca3bae9d1aae362ddf19cbbeb`;
 
@@ -89,7 +44,7 @@ const flammability = [
 
 async function getfirms() {
     try {
-        const response = await fetch(firmsURL);
+        const response = await fetch(firmsURL());
         return await response.text();
     } catch (error) {
         console.log("Firms API Error: ", error);
@@ -173,4 +128,3 @@ async function getData() {
 
     return coordenadas;
 }
-

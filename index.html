@@ -8,12 +8,15 @@
     <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="icon" href="assets/img/logoFirefighter.ico" type="image/x-icon">
+    <script src="assets/js/wildfire-tracker.js"></script>
 </head>
 <body>
     <div id="map"></div>
 
     <div id="logoNasa">
-        <img src="assets/img/nasa_logo.png" alt="NASA logo" id="nasaImg">
+        <a href="https://www.spaceappschallenge.org/2023/find-a-team/juandeteam/" target="_blank" rel="noopener noreferrer">
+            <img src="assets/img/nasa_logo.png" alt="NASA logo" id="nasaImg">
+        </a>
     </div>
 
     <div id="logoWeb">
@@ -34,7 +37,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/map-builder.js"></script>
     <script>
         // Función para añadir los marcadores rojos con líneas
         async function addFireMarkersAndLines() {
