@@ -88,7 +88,7 @@ async function getData() {
       const kHum = (100 - humidity) / 100;
 
       /** Porcentaje de terreno rural en España */
-      const kTerr = 0.7;
+      const kTerr = 0.5;
 
       let kFuelIndex = -1;
       if (hour >= 6 && hour <= 19) kFuelIndex = hour - 6;
