@@ -25,20 +25,20 @@ const openWeatherURL = (lat, lon) =>
  * 0 = North, 1 = South, 2 = West, 3 = East
  */
 const flammability = [
-  [0.1, 0.1, 0.1, 0.1],
-  [0.1, 0.1, 0.1, 0.2],
-  [0.1, 0.1, 0.1, 0.3],
-  [0.2, 0.1, 0.1, 0.4],
-  [0.26, 0.25, 0.2, 0.25],
-  [0.1, 0.5, 0.3, 0.15],
-  [0.15, 0.85, 0.4, 0.1],
-  [0.18, 1, 0.5, 0.26],
-  [0.2, 0.85, 0.6, 0.2],
-  [0.1, 0.5, 0.7, 0.1],
-  [0.1, 0.25, 0.8, 0.1],
-  [0.1, 0.1, 0.7, 0.1],
-  [0.1, 0.1, 0.5, 0.1],
-  [0.1, 0.1, 0.3, 0.1],
+  [1.1, 1.1, 1.1, 1.1],
+  [1.1, 1.1, 1.1, 1.2],
+  [1.1, 1.1, 1.1, 1.3],
+  [1.2, 1.1, 1.1, 1.4],
+  [1.26, 1.25, 1.2, 1.25],
+  [1.1, 1.5, 1.3, 1.15],
+  [1.15, 1.85, 1.4, 1.1],
+  [1.18, 2, 1.5, 1.26],
+  [1.2, 1.85, 1.6, 1.2],
+  [1.1, 1.5, 1.7, 1.1],
+  [1.1, 1.25, 1.8, 1.1],
+  [1.1, 1.1, 1.7, 1.1],
+  [1.1, 1.1, 1.5, 1.1],
+  [1.1, 1.1, 1.3, 1.1],
 ];
 
 async function getfirms() {
@@ -94,11 +94,20 @@ async function getData() {
       if (hour >= 6 && hour <= 19) kFuelIndex = hour - 6;
 
       const deg = wind.deg;
+
+      const kFcPrima = (deflectionAngle = 0) => {
+        let trueAngle = (deg - deflectionAngle - 45) * 0.0111 + 0.5;
+      
+        if (deg < 45 || deg > 90) trueAngle = 1 - trueAngle;
+      
+        return trueAngle;
+      };
+
       let kFc;
-      if (deg > 0 && deg < 90) kFc = deg * 0.0111;
-      else if (deg > 90 && deg < 180) kFc = (deg - 90) * 0.0111;
-      else if (deg > 180 && deg < 270) kFc = (deg - 180) * 0.0111;
-      else if (deg > 270 && deg < 360) kFc = (deg - 270) * 0.0111;
+      if (deg > 0 && deg < 90) kFc = kFcPrima();
+      else if (deg > 90 && deg < 180) kFc = kFcPrima(90);
+      else if (deg > 180 && deg < 270) kFc = kFcPrima(180);
+      else if (deg > 270 && deg < 360) kFc = kFcPrima(270);
       else if (deg === 45 || deg === 135 || deg === 225 || deg === 315)
         kFc = 0.5;
       else kFc = 1;
@@ -106,15 +115,12 @@ async function getData() {
       const kFuelPrima = (cardinalPoint) => 
         kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][cardinalPoint]);
 
+      /** kFuel = kFc * flammability */
       let kFuel;
-      if (deg > 45 && deg < 135)
-        kFuel = kFuelPrima(2);
-      else if (deg > 135 && deg < 225)
-        kFuel = kFuelPrima(0);
-      else if (deg > 225 && deg < 315)
-        kFuel = kFuelPrima(3);
-      else if (deg > 315 && deg < 45)
-        kFuel = kFuelPrima(1);
+      if (deg > 45 && deg < 135) kFuel = kFuelPrima(2);
+      else if (deg > 135 && deg < 225) kFuel = kFuelPrima(0);
+      else if (deg > 225 && deg < 315) kFuel = kFuelPrima(3);
+      else if (deg > 315 && deg < 45) kFuel = kFuelPrima(1);
       else kFuel = kFc;
 
       const firePropagation =
