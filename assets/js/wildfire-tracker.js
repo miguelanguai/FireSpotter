@@ -1,9 +1,21 @@
-let fecha = new Date();
-let year = fecha.getFullYear();
-let month = String(fecha.getMonth() + 1).padStart(2, "0");
-let day = String(fecha.getDate()).padStart(2, "0");
-let today = `${year}-${month}-${day}`;
-const firmsURL = `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${today}`;
+/**
+ * URL for retrieving CSV data from the NASA FIRMS API for a specific date.
+ * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current day.
+*/
+const firmsURL = (date) => {
+    if (date === undefined) {
+        const fecha = new Date();
+        const year = fecha.getFullYear();
+        const month = String(fecha.getMonth() + 1).padStart(2, "0");
+        const day = String(fecha.getDate()).padStart(2, "0");
+        
+        date = `${year}-${month}-${day}`;
+    };
+
+    return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${date}`;
+};
+
+/** URL for retrieving weather data based on latitude and longitude coordinates from OPEN WEATHER API. */
 const openWeatherURL = (lat, lon) =>
     `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=efd53a1ca3bae9d1aae362ddf19cbbeb`;
 
@@ -32,7 +44,7 @@ const flammability = [
 
 async function getfirms() {
     try {
-        const response = await fetch(firmsURL);
+        const response = await fetch(firmsURL());
         return await response.text();
     } catch (error) {
         console.log("Firms API Error: ", error);
