@@ -48,17 +48,28 @@
     const data = await getData();
 
     for (var i = 0; i < data.length; i++) {
-    const point = data[i];
-    L.marker([point.latitud, point.longitud], { icon: redIcon }).addTo(map);
+    const { latitud, longitud, windDeg, firePropagation, nearbyCity } = data[i];
+
+    const toolTip = `
+      <h4>${nearbyCity}</h4>
+      <hr>
+      <p>Latitud: ${latitud}</p>
+      <p>Longitud: ${longitud}</p>
+      <p>Ángulo del viento: ${windDeg} grados</p>
+      <p>Propagacion del fuego: ${Math.round(firePropagation)} metros</p>
+    `;
+
+    L.marker([latitud, longitud], { icon: redIcon })
+      .addTo(map)
+      .bindTooltip(toolTip);
 
     // Dibujar líneas desde el marcador rojo
-    drawLinesWithSecondaryLines(point);
+    drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation);
     }
   }
 
   // Función para dibujar líneas desde el marcador rojo
-  function drawLinesWithSecondaryLines(point) {
-    let { latitud, longitud, windDeg, firePropagation } = point;
+  function drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation) {
 
     const iniValue = () => windDeg + 180;
     windDeg = iniValue();

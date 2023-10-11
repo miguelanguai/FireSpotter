@@ -126,6 +126,7 @@ async function getData() {
         longitud,
         windDeg: wind.deg,
         firePropagation,
+        nearbyCity: openWeatherData.name
       };
     }),
   );
