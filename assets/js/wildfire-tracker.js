@@ -72,16 +72,12 @@ async function getData() {
 
       const wind = openWeatherData.wind;
 
-      const main = openWeatherData.main;
-      const temp = main.temp;
-      const humidity = main.humidity;
+      const { temp, temp_min, temp_max, humidity } = openWeatherData.main;
 
       // Algoritmo Propagacion
-      /**
-       * 0.02146 = Constante porcentual historico España. 273.15 = Cte de
-       * transformacion K-> C.
-       */
-      const kTemp = 0.02146 * (temp - 273.15);
+
+      /** Constante en base 1 de la temperatura */
+      const kTemp = (temp - temp_min)/(temp_max - temp_min);
 
       /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0.
        * */
