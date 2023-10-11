@@ -21,9 +21,7 @@ const firmsURL = (date) => {
 const openWeatherURL = (lat, lon) =>
   `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=efd53a1ca3bae9d1aae362ddf19cbbeb`;
 
-/**
- * 0 = North, 1 = South, 2 = West, 3 = East
- */
+/** 0 = North, 1 = South, 2 = West, 3 = East */
 const flammability = [
   [1.1, 1.1, 1.1, 1.1],
   [1.1, 1.1, 1.1, 1.2],
@@ -72,15 +70,16 @@ async function getData() {
 
       const wind = openWeatherData.wind;
 
-      const { temp, temp_min, temp_max, humidity } = openWeatherData.main;
+      const { temp, humidity } = openWeatherData.main;
 
       // Algoritmo Propagacion
 
+      const temp_min = 173.15;
+      const temp_max = 373.15;
       /** Constante en base 1 de la temperatura */
-      const kTemp = (temp - temp_min)/(temp_max - temp_min);
+      const kTemp = (((temp - temp_min)/(temp_max - temp_min))*(1 - 0.1)) + 0.1;
 
-      /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0.
-       * */
+      /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0. */
       const kHum = (100 - humidity) / 100;
 
       /** Porcentaje de terreno rural en España */
