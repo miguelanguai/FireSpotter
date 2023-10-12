@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>FireSpotter</title>
   <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-  />
   <link rel="icon" href="assets/img/logoFirefighter.ico" type="image/x-icon">
-  <script src="assets/js/wildfire-tracker.js"></script>
+  <link rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
 <body>
   <div id="map"></div>
@@ -40,94 +40,6 @@
   </div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="assets/js/map-builder.js"></script>
-  <script>
-  // Función para añadir los marcadores rojos con líneas
-  async function addFireMarkersAndLines() {
-    const data = await getData();
-
-    for (var i = 0; i < data.length; i++) {
-    const { latitud, longitud, windDeg, firePropagation, nearbyCity } = data[i];
-
-    const toolTip = `
-      <h4>${nearbyCity}</h4>
-      <hr>
-      <p>Latitud: ${latitud}</p>
-      <p>Longitud: ${longitud}</p>
-      <p>Ángulo del viento: ${windDeg} grados</p>
-      <p>Propagacion del fuego: ${Math.round(firePropagation)} metros</p>
-    `;
-
-    L.marker([latitud, longitud], { icon: redIcon })
-      .addTo(map)
-      .bindTooltip(toolTip);
-
-    // Dibujar líneas desde el marcador rojo
-    drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation);
-    }
-  }
-
-  // Función para dibujar líneas desde el marcador rojo
-  function drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation) {
-
-    const iniValue = () => windDeg + 180;
-    windDeg = iniValue();
-
-    const startPoint = [latitud, longitud];
-    const orientationRadians = (windDeg * Math.PI) / 180;
-
-    // Calcular las coordenadas finales de la línea principal
-    var endLat = 
-      latitud + (firePropagation / 111320) * Math.cos(orientationRadians);
-
-    var endLng = 
-      longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadians);
-
-    // Crear un arreglo con las coordenadas de inicio y fin de la línea
-    // principal
-    var lineCoordinates = [startPoint, [endLat, endLng]];
-
-    // Dibujar la línea principal en el mapa
-    var line = L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
-
-    // Grado de inclinación
-    const inclinationDegree = 0.45;
-
-    // Dibujar 100 líneas hacia grados MAYORES (anti-horario)
-    for (var i = 1; i <= 100; i++) {
-    var lineColor = getColorForLine(i);
-    var windDegSideA = windDeg + (i * inclinationDegree);
-    var orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
-    var endLatSideA = 
-      latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
-    var endLngSideA = 
-      longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
-    var lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
-    var lineSideA = L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
-    }
-
-    // Dibujar 10 líneas hacia grados MENORES (anti-horario)
-    for (var j = 1; j <= 100; j++) {
-    var lineColor = getColorForLine(j);
-    var windDegSideB = windDeg - (j * inclinationDegree);
-    var orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
-    var endLatSideB = 
-      latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
-    var endLngSideB = 
-      longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
-    var lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
-    var lineSideB = L.polyline(lineCoordinatesSideB, { color: lineColor, weight: 0.25 }).addTo(map);
-    }
-  }
-
-  // Función para obtener el color de la línea según el índice
-  function getColorForLine(index) {
-    const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
-    return colors[Math.floor(index / 20)] || 'black';
-  }
-
-  addFireMarkersAndLines();
-  </script>
+  <script type="module" src="assets/js/main.js"></script>
 </body>
 </html>
