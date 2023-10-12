@@ -48,7 +48,7 @@ async function getfirms() {
   }
 }
 
-async function getData() {
+export async function getData() {
   const firmsData = await getfirms();
 
   const lineas = firmsData.trim().split("\n");
