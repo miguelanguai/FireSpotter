@@ -1,7 +1,5 @@
-import { getData } from './wildfire-tracker.js';
-
 // Crear un mapa
-const map = L.map('map', {
+export const map = L.map('map', {
   zoomControl: false
 }).setView([40.41831, -3.70275], 6);
 
@@ -40,8 +38,8 @@ function showCurrentLocation() {
 };
 
 // Crear un icono rojo personalizado para los marcadores
-const redIcon = L.icon({
-  iconUrl: 'assets/img/fueguito.png',
+export const redIcon = L.icon({
+  iconUrl: "assets/img/fueguito.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -60,33 +58,8 @@ customScale.addTo(map);
 const scaleContainer = document.getElementById("scale");
 scaleContainer.appendChild(customScale.getContainer());
 
-// Función para añadir los marcadores rojos con líneas
-async function addFireMarkersAndLines() {
-  const data = await getData();
-
-  for (let i = 0; i < data.length; i++) {
-    const { latitud, longitud, windDeg, firePropagation, nearbyCity } = data[i];
-
-    const toolTip = `
-      <h4>${nearbyCity}</h4>
-      <hr>
-      <p>Latitud: ${latitud}</p>
-      <p>Longitud: ${longitud}</p>
-      <p>Ángulo del viento: ${windDeg} grados</p>
-      <p>Propagacion del fuego: ${Math.round(firePropagation)} metros</p>
-    `;
-
-    L.marker([latitud, longitud], { icon: redIcon })
-      .addTo(map)
-      .bindTooltip(toolTip);
-
-    // Dibujar líneas desde el marcador rojo
-    drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation);
-  }
-}
-
 // Función para dibujar líneas desde el marcador rojo
-function drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation) {
+export function drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation) {
 
   const iniValue = () => windDeg + 180;
   windDeg = iniValue();
@@ -142,5 +115,3 @@ function getColorForLine(index) {
   const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
   return colors[Math.floor(index / 20)] || 'black';
 }
-
-addFireMarkersAndLines();

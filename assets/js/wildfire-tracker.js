@@ -3,7 +3,7 @@
  * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current
  * day.
 */
-const firmsURL = (date) => {
+const firmsURL = (satellite, date) => {
   if (date === undefined) {
     const fecha = new Date();
     const year = fecha.getFullYear();
@@ -13,7 +13,7 @@ const firmsURL = (date) => {
     date = `${year}-${month}-${day}`;
   };
 
-  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/MODIS_NRT/-21,30,-4,43/1/${date}`;
+  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-21,30,-4,43/1/${date}`;
 };
 
 /** URL for retrieving weather data based on latitude and longitude coordinates
@@ -39,97 +39,152 @@ const flammability = [
   [1.1, 1.1, 1.3, 1.1],
 ];
 
-async function getfirms() {
+async function fetchFirmsData() {
+  let firmsData = [];
+
+  const source = "MODIS_NRT";
   try {
-    const response = await fetch(firmsURL());
-    return await response.text();
-  } catch (error) {
-    console.log("Firms API Error: ", error);
+    const csvResponse = await fetch(firmsURL(source));
+    const txtResponse = await csvResponse.text();
+    let data = txtResponse.trim().split("\n").slice(1);
+
+    firmsData.push({ source, data });
   }
-}
+  catch (error) {
+    console.error(`Firms API ${source} Error: `, error);
+  };
 
-export async function getData() {
-  const firmsData = await getfirms();
+  return firmsData;
+};
 
-  const lineas = firmsData.trim().split("\n");
-  const coordenadas = await Promise.all(
-    lineas.slice(1).map(async (linea) => {
-      const valores = linea.split(",");
+export async function formatFirmsData() {
+  const firmsData = await fetchFirmsData();
 
-      const latitud = parseFloat(valores[0]);
-      const longitud = parseFloat(valores[1]);
-      const hour = parseInt(valores[6].padStart(4, "0").substring(0, 2));
+  let firmsPoints = [];
+  if (firmsData.length > 0) {
 
-      let openWeatherData;
-      await fetch(openWeatherURL(latitud, longitud))
-        .then((response) => response.json())
-        .then((data) => (openWeatherData = data))
-        .catch((error) => {
-          console.log("Open Weather Error: ", error);
+    for (let i = 0; i < firmsData.length; i++) {
+      const { source, data } = firmsData[i];
+
+      for (let i = 0; i < data.length; i++) {
+        const rawHotSpot = (data[i] += `,${source}`).split(",");
+
+        const latitud = parseFloat(rawHotSpot[0]);
+        const longitud = parseFloat(rawHotSpot[1]);
+        const hour = parseInt(rawHotSpot[6].padStart(4, "0").substring(0, 2));
+        const satellite = rawHotSpot[rawHotSpot.length - 1];
+
+        firmsPoints.push({
+          latitud,
+          longitud,
+          satellite,
+          hour,
         });
+      };
+    };
+  };
 
-      const wind = openWeatherData.wind;
+  if (firmsPoints.length > 0) firmsPoints = sortFirmsPoints(firmsPoints);
 
-      const { temp, humidity } = openWeatherData.main;
+  return firmsPoints;
+};
 
-      // Algoritmo Propagacion
+function sortFirmsPoints(firmsPoints) {
+  let count = 0;
+  let hotSpotCount = 0;
+  let fireCount = 0;
+  let hotSpots = [];
+  let fires = [];
+  let wrap = [];
+  let lastKey = "";
 
-      const temp_min = 173.15;
-      const temp_max = 373.15;
-      /** Constante en base 1 de la temperatura */
-      const kTemp = (((temp - temp_min)/(temp_max - temp_min))*(1 - 0.1)) + 0.1;
+  firmsPoints.sort((a, b) => a.latitud - b.latitud).map(point => {
+    const { latitud, longitud } = point;
 
-      /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0. */
-      const kHum = (100 - humidity) / 100;
+    const roundedLat = Math.round(latitud);
+    const roundedLong = Math.round(longitud);
+    
+    // Unique key
+    const key = `${roundedLat},${roundedLong}`;
 
-      /** Porcentaje de terreno rural en España */
-      const kTerr = 0.5;
+    if (key !== lastKey) {
+      if (count > 0) {
 
-      let kFuelIndex = -1;
-      if (hour >= 6 && hour <= 19) kFuelIndex = hour - 6;
-
-      const deg = wind.deg;
-
-      const kFcPrima = (deflectionAngle = 0) => {
-        let trueAngle = (deg - deflectionAngle - 45) * 0.0111 + 0.5;
-      
-        if (deg < 45 || deg > 90) trueAngle = 1 - trueAngle;
-      
-        return trueAngle;
+        // const points = { points: wrap };
+        
+        if (wrap.length >= 4) fires[fireCount++] = wrap;
+        else hotSpots[hotSpotCount++] = wrap;
+        
+        wrap = [];
+        count = 0;
       };
 
-      let kFc;
-      if (deg > 0 && deg < 90) kFc = kFcPrima();
-      else if (deg > 90 && deg < 180) kFc = kFcPrima(90);
-      else if (deg > 180 && deg < 270) kFc = kFcPrima(180);
-      else if (deg > 270 && deg < 360) kFc = kFcPrima(270);
-      else if (deg === 45 || deg === 135 || deg === 225 || deg === 315)
-        kFc = 0.5;
-      else kFc = 1;
+      count++;
+      lastKey = key;
+    };
 
-      const kFuelPrima = (cardinalPoint) => 
-        kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][cardinalPoint]);
+    // Adds a new entry to the group
+    wrap.push(point);
+  });
 
-      /** kFuel = kFc * flammability */
-      let kFuel;
-      if (deg > 45 && deg < 135) kFuel = kFuelPrima(2);
-      else if (deg > 135 && deg < 225) kFuel = kFuelPrima(0);
-      else if (deg > 225 && deg < 315) kFuel = kFuelPrima(3);
-      else if (deg > 315 && deg < 45) kFuel = kFuelPrima(1);
-      else kFuel = kFc;
+  return { hotSpots, fires };
+};
 
-      const firePropagation =
-        wind.speed * 3600 * kFc * kHum * kTerr * kTemp * kFuel;
+export async function fetchOpenWeatherData(latitud, longitud) {
+  const response = await fetch(openWeatherURL(latitud, longitud));
+  const openWeatherData = await response.json();
 
-      return {
-        latitud,
-        longitud,
-        windDeg: wind.deg,
-        firePropagation,
-        nearbyCity: openWeatherData.name
-      };
-    }),
-  );
+  const windDeg = openWeatherData.wind.deg;
+  const windSpeed = openWeatherData.wind.speed;
+  const windGust = openWeatherData.wind.gust !== undefined ? true : false;
+  const { temp, humidity } = openWeatherData.main;
+  const nearbyCity = openWeatherData.name;
 
-  return coordenadas;
-}
+  return { windDeg, windSpeed, windGust, temp, humidity, nearbyCity };
+};
+
+export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
+  const temp_min = 173.15,
+    temp_max = 373.15;
+    
+  /** Constante en base 1 de la temperatura */ 
+  const kTemp = (((temp - temp_min) / (temp_max - temp_min)) * (1 - 0.1)) + 0.1;
+
+  /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0. */
+  const kHum = (100 - humidity) / 100;
+
+  /** Porcentaje de terreno rural en España */ 
+  const kTerr = 0.5;
+
+  let kFuelIndex = -1; if (hour >= 6 && hour <= 19) kFuelIndex = hour - 6;
+
+  const kFcPrima = (deflectionAngle = 0) => {
+    let trueAngle = (windDeg - deflectionAngle - 45) * 0.0111 + 0.5;
+
+    if (windDeg < 45 || windDeg > 90) trueAngle = 1 - trueAngle;
+
+    return trueAngle;
+  };
+
+  let kFc; 
+  if (windDeg > 0 && windDeg < 90) kFc = kFcPrima(); 
+  else if (windDeg > 90 && windDeg < 180) kFc = kFcPrima(90); 
+  else if (windDeg > 180 && windDeg < 270) kFc  = kFcPrima(180); 
+  else if (windDeg > 270 && windDeg < 360) kFc = kFcPrima(270);
+  else if (windDeg === 45 || windDeg === 135 || windDeg === 225 || windDeg === 315) 
+    kFc = 0.5; 
+  else kFc = 1;
+
+  const kFuelPrima = (cardinalPoint) => 
+    kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][cardinalPoint]);
+
+  /** kFuel = kFc * flammability */ 
+  let kFuel; 
+  if (windDeg > 45 && windDeg < 135) kFuel = kFuelPrima(2); 
+  else if (windDeg > 135 && windDeg < 225) kFuel = kFuelPrima(0); 
+  else if (windDeg > 225 && windDeg < 315) kFuel = kFuelPrima(3);
+  else if (windDeg > 315 && windDeg < 45) kFuel = kFuelPrima(1); 
+  else kFuel = kFc;
+
+  return (windSpeed * 3600 * kFc * kHum * kTerr * kTemp * kFuel);
+};
