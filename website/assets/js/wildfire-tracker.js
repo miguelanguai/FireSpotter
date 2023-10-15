@@ -109,9 +109,6 @@ function sortFirmsPoints(firmsPoints) {
 
     if (key !== lastKey) {
       if (count > 0) {
-
-        // const points = { points: wrap };
-        
         if (wrap.length >= 4) fires[fireCount++] = wrap;
         else hotSpots[hotSpotCount++] = wrap;
         
