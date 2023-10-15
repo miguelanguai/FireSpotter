@@ -80,35 +80,29 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
   // Dibujar la línea principal en el mapa
   L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
 
-  // Grado de inclinación
-  const inclinationDegree = 0.45;
+  // Draws 200 lines anti-horary way based on the wind degrees.
+  let direction = 1;
+  let count = 1;
+  const inclinationDegrees = 0.45;
 
-  // Dibujar 100 líneas hacia grados MAYORES (anti-horario)
-  for (let i = 1; i <= 100; i++) {
-    const lineColor = getColorForLine(i);
-    const windDegSideA = windDeg + (i * inclinationDegree);
-    const orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
-    const endLatSideA =
-      latitude + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
-    const endLngSideA =
-      longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
-    const lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
-    L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
-  }
+  for (let i = 1; i <= 200; i++) {
+    const lineColor = getColorForLine(count);
+    const windDegSide = windDeg + direction * count++ * inclinationDegrees;
+    const orientationRadiansSide = (windDegSide * Math.PI) / 180;
+    const endLatSide =
+      latitude + (firePropagation / 111320) * Math.cos(orientationRadiansSide);
+    const endLngSide =
+      longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSide);
+    const lineCoordinatesSide = [startPoint, [endLatSide, endLngSide]];
+    L.polyline(lineCoordinatesSide, { color: lineColor, weight: 0.25 }).addTo(map);
 
-  // Dibujar 100 líneas hacia grados MENORES (anti-horario)
-  for (let j = 1; j <= 100; j++) {
-    const lineColor = getColorForLine(j);
-    const windDegSideB = windDeg - (j * inclinationDegree);
-    const orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
-    const endLatSideB =
-      latitude + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
-    const endLngSideB =
-      longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
-    const lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
-    L.polyline(lineCoordinatesSideB, { color: lineColor, weight: 0.25 }).addTo(map);
-  }
-}
+    // Restart the loop counter to print lines in the other side.
+    if (i === 100) {
+      direction = -1;
+      count = 1;
+    };
+  };
+};
 
 /**
  * Returns a color based on the index provided, with a default color of black.
