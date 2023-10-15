@@ -1,14 +1,14 @@
-// Crear un mapa
+// Creates a map
 export const map = L.map('map', {
   zoomControl: false
 }).setView([40.41831, -3.70275], 6);
 
-// Definir límites del mapa
+// Sets the limit of the map
 const southWest = L.latLng(-85, -180);
 const northEast = L.latLng(85, 180);
 const bounds = L.latLngBounds(southWest, northEast);
 
-// Agregar una capa de mapa físico
+// Adds a real map layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 20,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -20,12 +20,12 @@ let currentLocationIsShown = false;
 function showCurrentLocation() {
   if ("geolocation" in navigator && currentLocationIsShown == false) {
     navigator.geolocation.getCurrentPosition(function (position) {
-      const lat = position.coords.latitudee;
-      const lng = position.coords.longitudee;
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
 
-      // Crear un marcador en la ubicación actual
+      // Set a marker in the current location
       L.marker([lat, lng]).addTo(map);
-      map.setView([lat, lng], 15); // Centrar el mapa en la ubicación actual
+      map.setView([lat, lng], 15); // Set the view in the current location
       currentLocationIsShown = true;
     });
   } else if (currentLocationIsShown == true) {
@@ -33,11 +33,11 @@ function showCurrentLocation() {
     currentLocationIsShown = false;
   }
   else {
-    alert("Tu navegador no admite la geolocalización.");
-  }
+    alert("Your navigator doesn't allow geolocation");
+  };
 };
 
-// Crear un icono rojo personalizado para los marcadores
+// Create a custom red icon marker
 export const redIcon = L.icon({
   iconUrl: "assets/img/fueguito.png",
   iconSize: [25, 41],
@@ -46,19 +46,22 @@ export const redIcon = L.icon({
   shadowSize: [41, 41]
 });
 
-// Agregar un controlador de eventos al botón
+// Adds a event listener to the button
 const getLocationButton = document.getElementById("getLocationButton");
 getLocationButton.addEventListener("click", showCurrentLocation);
 
-// Añadir escala al mapa
+// Adds a scale to the map
 const customScale = L.control.scale();
 customScale.addTo(map);
 
-// Obtener el contenedor "scale" por su ID y agregar el control de escala
+// Gets the "scale" by it's ID and sets a controller
 const scaleContainer = document.getElementById("scale");
 scaleContainer.appendChild(customScale.getContainer());
 
-// Función para dibujar líneas desde el marcador rojo
+/**
+ * Takes in latitude, longitude, wind degrees, and fire propagation
+ * and draws lines on the map to represent fire propagation and wind direction.
+ */
 export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation) {
 
   const iniValue = () => windDeg + 180;
@@ -67,18 +70,15 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
   const startPoint = [latitude, longitude];
   const orientationRadians = (windDeg * Math.PI) / 180;
 
-  // Calcular las coordenadas finales de la línea principal
+  // Calculates the dimension of the fire propagation
   const endLat =
     latitude + (firePropagation / 111320) * Math.cos(orientationRadians);
 
   const endLng =
     longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadians);
 
-  // Crear un arreglo con las coordenadas de inicio y fin de la línea principal
-  const lineCoordinates = [startPoint, [endLat, endLng]];
-
-  // Dibujar la línea principal en el mapa
-  L.polyline(lineCoordinates, { color: 'purple' }).addTo(map);
+  // Dawns the fire propagation into the map
+  L.polyline([startPoint, [endLat, endLng]], { color: 'purple' }).addTo(map);
 
   // Draws 200 lines anti-horary way based on the wind degrees.
   let direction = 1;
@@ -111,4 +111,4 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
 function getColorForLine(index) {
   const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
   return colors[Math.floor(index / 20)] || 'black';
-}
+};
