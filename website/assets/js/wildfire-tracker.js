@@ -5,10 +5,10 @@
 */
 const firmsURL = (satellite, date) => {
   if (date === undefined) {
-    const fecha = new Date();
-    const year = fecha.getFullYear();
-    const month = String(fecha.getMonth() + 1).padStart(2, "0");
-    const day = String(fecha.getDate()).padStart(2, "0");
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
 
     date = `${year}-${month}-${day}`;
   };
@@ -69,14 +69,14 @@ export async function formatFirmsData() {
       for (let i = 0; i < data.length; i++) {
         const rawHotSpot = (data[i] += `,${source}`).split(",");
 
-        const latitud = parseFloat(rawHotSpot[0]);
-        const longitud = parseFloat(rawHotSpot[1]);
+        const latitude = parseFloat(rawHotSpot[0]);
+        const longitude = parseFloat(rawHotSpot[1]);
         const hour = parseInt(rawHotSpot[6].padStart(4, "0").substring(0, 2));
         const satellite = rawHotSpot[rawHotSpot.length - 1];
 
         firmsPoints.push({
-          latitud,
-          longitud,
+          latitude,
+          longitude,
           satellite,
           hour,
         });
@@ -98,11 +98,11 @@ function sortFirmsPoints(firmsPoints) {
   let wrap = [];
   let lastKey = "";
 
-  firmsPoints.sort((a, b) => a.latitud - b.latitud).map(point => {
-    const { latitud, longitud } = point;
+  firmsPoints.sort((a, b) => a.latitude - b.latitude).map(point => {
+    const { latitude, longitude } = point;
 
-    const roundedLat = Math.round(latitud);
-    const roundedLong = Math.round(longitud);
+    const roundedLat = Math.round(latitude);
+    const roundedLong = Math.round(longitude);
     
     // Unique key
     const key = `${roundedLat},${roundedLong}`;
@@ -127,8 +127,8 @@ function sortFirmsPoints(firmsPoints) {
   return { hotSpots, fires };
 };
 
-export async function fetchOpenWeatherData(latitud, longitud) {
-  const response = await fetch(openWeatherURL(latitud, longitud));
+export async function fetchOpenWeatherData(latitude, longitude) {
+  const response = await fetch(openWeatherURL(latitude, longitude));
   const openWeatherData = await response.json();
 
   const windDeg = openWeatherData.wind.deg;

@@ -14,7 +14,7 @@ for (const type in points) {
     const points = pointsType[i];
     
     for (let i = 0; i < points.length; i++) {
-      const { latitud, longitud, hour, satellite } = points[i];
+      const { latitude, longitude, hour, satellite } = points[i];
       
       const {
         windDeg, 
@@ -23,7 +23,7 @@ for (const type in points) {
         temp, 
         humidity, 
         nearbyCity 
-      } = await fetchOpenWeatherData(latitud, longitud);
+      } = await fetchOpenWeatherData(latitude, longitude);
 
       const firePropagation = 
         propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour);
@@ -37,19 +37,18 @@ for (const type in points) {
             .replace(/([A-Z])/g, ' $1').trim()
         }</p>
         <p>Satellite: ${satellite}</p>
-        <p>Latitude: ${latitud}</p>
-        <p>Longitude: ${longitud}</p>
-        <p>Wind degrees: ${windDeg} grados</p>
+        <p>latitude: ${latitude}</p>
+        <p>longitude: ${longitude}</p>
+        <p>Wind degrees: ${windDeg} degrees</p>
         <p>Wind speed: ${windSpeed} meters/sec</p>
         <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
       `;
 
-      L.marker([latitud, longitud], { icon: redIcon })
+      L.marker([latitude, longitude], { icon: redIcon })
         .addTo(map)
         .bindTooltip(toolTip);
 
-      // Dibujar líneas desde el marcador rojo
-      drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation);
+      drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation);
     }
   };
 };

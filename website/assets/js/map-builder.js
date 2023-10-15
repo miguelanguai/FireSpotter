@@ -20,8 +20,8 @@ let currentLocationIsShown = false;
 function showCurrentLocation() {
   if ("geolocation" in navigator && currentLocationIsShown == false) {
     navigator.geolocation.getCurrentPosition(function (position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
+      const lat = position.coords.latitudee;
+      const lng = position.coords.longitudee;
 
       // Crear un marcador en la ubicación actual
       L.marker([lat, lng]).addTo(map);
@@ -59,20 +59,20 @@ const scaleContainer = document.getElementById("scale");
 scaleContainer.appendChild(customScale.getContainer());
 
 // Función para dibujar líneas desde el marcador rojo
-export function drawLinesWithSecondaryLines(latitud, longitud, windDeg, firePropagation) {
+export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation) {
 
   const iniValue = () => windDeg + 180;
   windDeg = iniValue();
 
-  const startPoint = [latitud, longitud];
+  const startPoint = [latitude, longitude];
   const orientationRadians = (windDeg * Math.PI) / 180;
 
   // Calcular las coordenadas finales de la línea principal
   const endLat =
-    latitud + (firePropagation / 111320) * Math.cos(orientationRadians);
+    latitude + (firePropagation / 111320) * Math.cos(orientationRadians);
 
   const endLng =
-    longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadians);
+    longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadians);
 
   // Crear un arreglo con las coordenadas de inicio y fin de la línea principal
   const lineCoordinates = [startPoint, [endLat, endLng]];
@@ -89,28 +89,31 @@ export function drawLinesWithSecondaryLines(latitud, longitud, windDeg, fireProp
     const windDegSideA = windDeg + (i * inclinationDegree);
     const orientationRadiansSideA = (windDegSideA * Math.PI) / 180;
     const endLatSideA =
-      latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
+      latitude + (firePropagation / 111320) * Math.cos(orientationRadiansSideA);
     const endLngSideA =
-      longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
+      longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSideA);
     const lineCoordinatesSideA = [startPoint, [endLatSideA, endLngSideA]];
     L.polyline(lineCoordinatesSideA, { color: lineColor, weight: 0.25 }).addTo(map);
   }
 
-  // Dibujar 10 líneas hacia grados MENORES (anti-horario)
+  // Dibujar 100 líneas hacia grados MENORES (anti-horario)
   for (let j = 1; j <= 100; j++) {
     const lineColor = getColorForLine(j);
     const windDegSideB = windDeg - (j * inclinationDegree);
     const orientationRadiansSideB = (windDegSideB * Math.PI) / 180;
     const endLatSideB =
-      latitud + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
+      latitude + (firePropagation / 111320) * Math.cos(orientationRadiansSideB);
     const endLngSideB =
-      longitud + (firePropagation / (111320 * Math.cos(latitud * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
+      longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSideB);
     const lineCoordinatesSideB = [startPoint, [endLatSideB, endLngSideB]];
     L.polyline(lineCoordinatesSideB, { color: lineColor, weight: 0.25 }).addTo(map);
   }
 }
 
-// Función para obtener el color de la línea según el índice
+/**
+ * Returns a color based on the index provided, with a default color of black.
+ * @param index - Position of a line in a list or array.
+ */
 function getColorForLine(index) {
   const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
   return colors[Math.floor(index / 20)] || 'black';
