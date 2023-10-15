@@ -84,9 +84,10 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
   let direction = 1;
   let count = 1;
   const inclinationDegrees = 0.45;
+  const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
 
   for (let i = 1; i <= 200; i++) {
-    const lineColor = getColorForLine(count);
+    const lineColor = colors[Math.floor(count / 20)] || 'black';
     const windDegSide = windDeg + direction * count++ * inclinationDegrees;
     const orientationRadiansSide = (windDegSide * Math.PI) / 180;
     const endLatSide =
@@ -104,11 +105,3 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
   };
 };
 
-/**
- * Returns a color based on the index provided, with a default color of black.
- * @param index - Position of a line in a list or array.
- */
-function getColorForLine(index) {
-  const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'brown'];
-  return colors[Math.floor(index / 20)] || 'black';
-};
