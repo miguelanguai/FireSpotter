@@ -1,0 +1,40 @@
+name: Deploy Static Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Minify html, css and js files
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v3
+
+      - name: Use "static-website-minifier-workflow" Action
+        uses: pabcrudel/static-website-minifier-workflow@main
+        with:
+          project_path: "website"
+          artifact_name: "minified-website"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v3
+
+      - name: Download Minified Files
+        uses: actions/download-artifact@v3
+        with:
+          name: minified-website
+          path: dist
+      
+      - name: Use "github-pages-deploy-action" Action
+        uses: JamesIves/github-pages-deploy-action@v4.4.3
+        with:
+          folder: dist
+          token: ${{ secrets.TOKEN }}
