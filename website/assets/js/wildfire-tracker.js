@@ -42,7 +42,7 @@ const flammability = [
 async function fetchFirmsData() {
   let firmsData = [];
 
-  const source = "MODIS_NRT";
+  const source = "VIIRS_NOAA20_NRT";
   try {
     const csvResponse = await fetch(firmsURL(source));
     const txtResponse = await csvResponse.text();
