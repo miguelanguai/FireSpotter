@@ -39,7 +39,7 @@ function showCurrentLocation() {
 
 // Crear un icono rojo personalizado para los marcadores
 export const redIcon = L.icon({
-  iconUrl: "assets/img/fueguito.png",
+  iconUrl: "assets/img/flame.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
