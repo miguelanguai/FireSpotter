@@ -23,6 +23,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
+    permissions:
+      contents: write
     steps:
       - name: Checkout files
         uses: actions/checkout@v3
@@ -33,8 +35,7 @@ jobs:
           name: minified-website
           path: dist
       
-      - name: Use "github-pages-deploy-action" Action
+      - name: Use JamesIves Deployment Action
         uses: JamesIves/github-pages-deploy-action@v4.4.3
         with:
           folder: dist
-          token: ${{ secrets.TOKEN }}
