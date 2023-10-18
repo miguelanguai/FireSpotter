@@ -101,8 +101,8 @@ function sortFirmsPoints(firmsPoints) {
   firmsPoints.sort((a, b) => a.latitude - b.latitude).map(point => {
     const { latitude, longitude } = point;
 
-    const roundedLat = Math.round(latitude);
-    const roundedLong = Math.round(longitude);
+    const roundedLat = Math.floor(latitude * 10) / 10;
+    const roundedLong = Math.floor(longitude * 10) / 10;
     
     // Unique key
     const key = `${roundedLat},${roundedLong}`;
