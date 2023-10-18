@@ -13,7 +13,7 @@ const firmsURL = (satellite, date) => {
     date = `${year}-${month}-${day}`;
   };
 
-  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-21,30,-4,43/1/${date}`;
+  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-11,35,3,45/1/${date}`;
 };
 
 /** URL for retrieving weather data based on latitude and longitude coordinates
