@@ -16,7 +16,7 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
         const points = pointsType[i];
         
         for (let i = 0; i < points.length; i++) {
-          const { latitude, longitude, hour, satellite } = points[i];
+          const { latitude, longitude, hour, satellite, frp } = points[i];
           
           const {
             windDeg, 
@@ -39,11 +39,12 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
                 .replace(/([A-Z])/g, ' $1').trim()
             }</p>
             <p>Satellite: ${satellite}</p>
+            <p>Fire Radiative Power: ${frp}</p>
+            <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
             <p>latitude: ${latitude}</p>
             <p>longitude: ${longitude}</p>
             <p>Wind degrees: ${windDeg} degrees</p>
             <p>Wind speed: ${windSpeed} meters/sec</p>
-            <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
           `;
 
           L.marker([latitude, longitude], { icon: redIcon })

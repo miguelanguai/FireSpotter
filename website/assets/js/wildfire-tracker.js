@@ -13,7 +13,7 @@ const firmsURL = (satellite, date) => {
     date = `${year}-${month}-${day}`;
   };
 
-  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-21,30,-4,43/1/${date}`;
+  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-11,35,3,45/1/${date}`;
 };
 
 /** URL for retrieving weather data based on latitude and longitude coordinates
@@ -74,11 +74,15 @@ export async function formatFirmsData() {
         const hour = parseInt(rawHotSpot[6].padStart(4, "0").substring(0, 2));
         const satellite = rawHotSpot[rawHotSpot.length - 1];
 
+        /** Fire Radiative Power */
+        const frp = parseFloat(rawHotSpot[12]);
+
         firmsPoints.push({
           latitude,
           longitude,
           satellite,
           hour,
+          frp,
         });
       };
     };
@@ -98,18 +102,34 @@ function sortFirmsPoints(firmsPoints) {
   let wrap = [];
   let lastKey = "";
 
+  /**
+   * Checks if there is any point with a FRP greater than 10.
+   * @returns Boolean value indicating if the wrapped points are fires.
+   */
+  function isFire() {
+    let isFire = false;
+
+    for (let i = 0; !isFire && i < wrap.length; i++)
+      if (wrap[i].frp > 10) isFire = true;
+      
+    return isFire;
+  }
+
   firmsPoints.sort((a, b) => a.latitude - b.latitude).map(point => {
     const { latitude, longitude } = point;
 
-    const roundedLat = Math.round(latitude);
-    const roundedLong = Math.round(longitude);
+    const roundedLat = Math.floor(latitude * 10) / 10;
+    const roundedLong = Math.floor(longitude * 10) / 10;
     
     // Unique key
     const key = `${roundedLat},${roundedLong}`;
 
     if (key !== lastKey) {
       if (count > 0) {
-        if (wrap.length >= 4) fires[fireCount++] = wrap;
+        const checkState = isFire();
+
+        if ((wrap.length >= 4 && checkState) || checkState) 
+          fires[fireCount++] = wrap;
         else hotSpots[hotSpotCount++] = wrap;
         
         wrap = [];
