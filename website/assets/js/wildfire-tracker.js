@@ -82,6 +82,7 @@ export async function formatFirmsData() {
           longitude,
           satellite,
           hour,
+          frp,
         });
       };
     };
@@ -101,6 +102,10 @@ function sortFirmsPoints(firmsPoints) {
   let wrap = [];
   let lastKey = "";
 
+  /**
+   * Checks if there is any point with a FRP greater than 10.
+   * @returns Boolean value indicating if the wrapped points are fires.
+   */
   function isFire() {
     let isFire = false;
 
@@ -123,7 +128,8 @@ function sortFirmsPoints(firmsPoints) {
       if (count > 0) {
         const checkState = isFire();
 
-        if ((wrap.length >= 4 && checkState) || checkState) fires[fireCount++] = wrap;
+        if ((wrap.length >= 4 && checkState) || checkState) 
+          fires[fireCount++] = wrap;
         else hotSpots[hotSpotCount++] = wrap;
         
         wrap = [];
