@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Minify html, css and js files
-        uses: pabcrudel/static-website-minifier-workflow@main
+        uses: pabcrudel/static-site-optimizer@main
         with:
           project_path: website
 
