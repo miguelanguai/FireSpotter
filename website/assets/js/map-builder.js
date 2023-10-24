@@ -10,7 +10,7 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 // Adds a real map layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 20,
+  maxZoom: 19,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   bounds,
   noWrap: true
