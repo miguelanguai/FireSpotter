@@ -1229,8 +1229,15 @@ const countries = [
 
     if (country !== undefined) {
       map.setView(country.coordinates, 5);
-      
-      const points = await fetchFirmsData(country.abbreviation);
+
+      let points;
+
+      let localPoints = localStorage.getItem("points");
+      if (localPoints === null) {
+        points = await fetchFirmsData(country.abbreviation);
+        localStorage.setItem("points", JSON.stringify(points));
+      }
+      else points = JSON.parse(localPoints);
   
       if (
         (points.hotSpots !== undefined && points.hotSpots.length > 0) ||
