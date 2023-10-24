@@ -9,53 +9,56 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
   try {
     const points = await formatFirmsData();
 
-    for (const type in points) {
-      const pointsType = points[type];
-
-      for (let i = 0; i < pointsType.length; i++) {
-        const points = pointsType[i];
-        
-        for (let i = 0; i < points.length; i++) {
-          const { latitude, longitude, hour, satellite, frp } = points[i];
+    if (points.hotSpots.length > 0 || points.fires.length > 0) {
+      for (const type in points) {
+        const pointsType = points[type];
+  
+        for (let i = 0; i < pointsType.length; i++) {
+          const points = pointsType[i];
           
-          const {
-            windDeg, 
-            windSpeed, 
-            windGust, 
-            temp, 
-            humidity, 
-            nearbyCity 
-          } = await fetchOpenWeatherData(latitude, longitude);
-
-          const firePropagation = 
-            propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour);
-          
-          const toolTip = `
-            <h4>${nearbyCity}</h4>
-            <hr>
-            <p>Prediction: ${
-              type
-                .replace(/(?:^|\s)./g, match => match.toUpperCase())
-                .replace(/([A-Z])/g, ' $1').trim()
-            }</p>
-            <p>Satellite: ${satellite}</p>
-            <p>Fire Radiative Power: ${frp}</p>
-            <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
-            <p>latitude: ${latitude}</p>
-            <p>longitude: ${longitude}</p>
-            <p>Wind degrees: ${windDeg} degrees</p>
-            <p>Wind speed: ${windSpeed} meters/sec</p>
-          `;
-
-          L.marker([latitude, longitude], { icon: redIcon })
-            .addTo(map)
-            .bindTooltip(toolTip);
-
-          drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation);
+          for (let i = 0; i < points.length; i++) {
+            const { latitude, longitude, hour, satellite, frp } = points[i];
+            
+            const {
+              windDeg, 
+              windSpeed, 
+              windGust, 
+              temp, 
+              humidity, 
+              nearbyCity 
+            } = await fetchOpenWeatherData(latitude, longitude);
+  
+            const firePropagation = 
+              propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour);
+            
+            const toolTip = `
+              <h4>${nearbyCity}</h4>
+              <hr>
+              <p>Prediction: ${
+                type
+                  .replace(/(?:^|\s)./g, match => match.toUpperCase())
+                  .replace(/([A-Z])/g, ' $1').trim()
+              }</p>
+              <p>Satellite: ${satellite}</p>
+              <p>Fire Radiative Power: ${frp}</p>
+              <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
+              <p>latitude: ${latitude}</p>
+              <p>longitude: ${longitude}</p>
+              <p>Wind degrees: ${windDeg} degrees</p>
+              <p>Wind speed: ${windSpeed} meters/sec</p>
+            `;
+  
+            L.marker([latitude, longitude], { icon: redIcon })
+              .addTo(map)
+              .bindTooltip(toolTip);
+  
+            drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation);
+          }
         }
       }
     }
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error:', error);
   }
 })();
