@@ -7,6 +7,8 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
 
 (async () => {
   try {
+    map.setView([40.41831, -3.70275], 6);
+    
     const points = await formatFirmsData();
 
     if (points.hotSpots.length > 0 || points.fires.length > 0) {
