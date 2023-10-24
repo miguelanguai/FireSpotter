@@ -3,7 +3,7 @@
  * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current
  * day.
 */
-const firmsURL = (satellite, date) => {
+const firmsURL = (source, country = "ESP", date) => {
   if (date === undefined) {
     const today = new Date();
     const year = today.getFullYear();
@@ -13,7 +13,7 @@ const firmsURL = (satellite, date) => {
     date = `${year}-${month}-${day}`;
   };
 
-  return `https://firms.modaps.eosdis.nasa.gov/api/area/csv/8b8845657503cd8c75f8b4a0a7f8b177/${satellite}/-11,35,3,45/1/${date}`;
+  return `https://firms.modaps.eosdis.nasa.gov/api/country/csv/8b8845657503cd8c75f8b4a0a7f8b177/${source}/${country}/1/${date}`;
 };
 
 /** URL for retrieving weather data based on latitude and longitude coordinates
@@ -39,58 +39,51 @@ const flammability = [
   [1.1, 1.1, 1.3, 1.1],
 ];
 
-async function fetchFirmsData() {
+export async function fetchFirmsData(country) {
   let firmsData = [];
 
   const source = "VIIRS_NOAA20_NRT";
-  try {
-    const csvResponse = await fetch(firmsURL(source));
-    const txtResponse = await csvResponse.text();
-    let data = txtResponse.trim().split("\n").slice(1);
 
+  const csvResponse = await fetch(firmsURL(source, country));
+  const txtResponse = await csvResponse.text();
+  let data = txtResponse.trim().split("\n").slice(1);
+
+  if (data.length > 0) {
     firmsData.push({ source, data });
-  }
-  catch (error) {
-    console.error(`Firms API ${source} Error: `, error);
-  };
 
+    firmsData = formatFirmsData(firmsData);
+  };
+  
   return firmsData;
 };
 
-export async function formatFirmsData() {
-  const firmsData = await fetchFirmsData();
-
+function formatFirmsData(firmsData) {
   let firmsPoints = [];
-  if (firmsData.length > 0) {
 
-    for (let i = 0; i < firmsData.length; i++) {
-      const { source, data } = firmsData[i];
+  for (let i = 0; i < firmsData.length; i++) {
+    const { source, data } = firmsData[i];
 
-      for (let i = 0; i < data.length; i++) {
-        const rawHotSpot = (data[i] += `,${source}`).split(",");
+    for (let i = 0; i < data.length; i++) {
+      const point = data[i].split(",");
 
-        const latitude = parseFloat(rawHotSpot[0]);
-        const longitude = parseFloat(rawHotSpot[1]);
-        const hour = parseInt(rawHotSpot[6].padStart(4, "0").substring(0, 2));
-        const satellite = rawHotSpot[rawHotSpot.length - 1];
+      const latitude = parseFloat(point[1]);
+      const longitude = parseFloat(point[2]);
+      const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
 
-        /** Fire Radiative Power */
-        const frp = parseFloat(rawHotSpot[12]);
+      /** Fire Radiative Power */
+      const frp = parseFloat(point[13]);
 
-        firmsPoints.push({
-          latitude,
-          longitude,
-          satellite,
-          hour,
-          frp,
-        });
-      };
+      firmsPoints.push({
+        latitude,
+        longitude,
+        source,
+        hour,
+        frp,
+      });
     };
   };
 
-  if (firmsPoints.length > 0) firmsPoints = sortFirmsPoints(firmsPoints);
-
-  return firmsPoints;
+  return sortFirmsPoints(firmsPoints);
 };
 
 function sortFirmsPoints(firmsPoints) {

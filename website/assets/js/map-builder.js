@@ -1,7 +1,7 @@
 // Creates a map
 export const map = L.map('map', {
   zoomControl: false
-}).setView([40.41831, -3.70275], 6);
+});
 
 // Sets the limit of the map
 const southWest = L.latLng(-85, -180);
@@ -10,7 +10,7 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 // Adds a real map layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 20,
+  maxZoom: 19,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   bounds,
   noWrap: true
