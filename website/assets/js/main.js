@@ -1232,7 +1232,7 @@ const countries = [
 
       let points;
 
-      let localPoints = localStorage.getItem("points");
+      const localPoints = localStorage.getItem("points");
       if (localPoints === null) {
         points = await fetchFirmsData(country.abbreviation);
         localStorage.setItem("points", JSON.stringify(points));
@@ -1242,7 +1242,7 @@ const countries = [
       if (
         (points.hotSpots !== undefined && points.hotSpots.length > 0) ||
         (points.fires !== undefined && points.fires.length > 0)
-      ) 
+      )
       {
         for (const type in points) {
           const pointsType = points[type];
@@ -1253,6 +1253,16 @@ const countries = [
             for (let i = 0; i < points.length; i++) {
               const { latitude, longitude, hour, source, frp } = points[i];
               
+              let weatherData;
+
+              const key = `[${latitude},${longitude}]`;
+              const localWeatherData = localStorage.getItem(key);
+              if (localWeatherData === null) {
+                weatherData = await fetchOpenWeatherData(latitude, longitude);
+                localStorage.setItem(key, JSON.stringify(weatherData));
+              }
+              else weatherData = JSON.parse(localWeatherData);
+
               const {
                 windDeg,
                 windSpeed,
@@ -1260,7 +1270,7 @@ const countries = [
                 temp,
                 humidity,
                 nearbyCity
-              } = await fetchOpenWeatherData(latitude, longitude);
+              } = weatherData;
     
               const firePropagation =
                 propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour);
