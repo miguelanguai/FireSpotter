@@ -1,5 +1,5 @@
 import { 
-  formatFirmsData, 
+  fetchFirmsData, 
   fetchOpenWeatherData, 
   propagationAlgorithm 
 } from './wildfire-tracker.js';
@@ -1230,10 +1230,10 @@ const countries = [
     if (country !== undefined) {
       map.setView(country.coordinates, 5);
       
-      const points = await formatFirmsData(country.abbreviation);
+      const points = await fetchFirmsData(country.abbreviation);
   
       if (
-        (points.hotSpots !== undefined && points.hotSpots.length > 0) || 
+        (points.hotSpots !== undefined && points.hotSpots.length > 0) ||
         (points.fires !== undefined && points.fires.length > 0)
       ) 
       {
@@ -1244,18 +1244,18 @@ const countries = [
             const points = pointsType[i];
             
             for (let i = 0; i < points.length; i++) {
-              const { latitude, longitude, hour, satellite, frp } = points[i];
+              const { latitude, longitude, hour, source, frp } = points[i];
               
               const {
-                windDeg, 
-                windSpeed, 
-                windGust, 
-                temp, 
-                humidity, 
-                nearbyCity 
+                windDeg,
+                windSpeed,
+                windGust,
+                temp,
+                humidity,
+                nearbyCity
               } = await fetchOpenWeatherData(latitude, longitude);
     
-              const firePropagation = 
+              const firePropagation =
                 propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour);
               
               const toolTip = `
@@ -1266,7 +1266,7 @@ const countries = [
                     .replace(/(?:^|\s)./g, match => match.toUpperCase())
                     .replace(/([A-Z])/g, ' $1').trim()
                 }</p>
-                <p>Satellite: ${satellite}</p>
+                <p>Source: ${source}</p>
                 <p>Fire Radiative Power: ${frp}</p>
                 <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
                 <p>latitude: ${latitude}</p>

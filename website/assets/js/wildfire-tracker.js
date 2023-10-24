@@ -39,7 +39,7 @@ const flammability = [
   [1.1, 1.1, 1.3, 1.1],
 ];
 
-async function fetchFirmsData(country) {
+export async function fetchFirmsData(country) {
   let firmsData = [];
 
   const source = "VIIRS_NOAA20_NRT";
@@ -48,45 +48,42 @@ async function fetchFirmsData(country) {
   const txtResponse = await csvResponse.text();
   let data = txtResponse.trim().split("\n").slice(1);
 
-  firmsData.push({ source, data });
+  if (data.length > 0) {
+    firmsData.push({ source, data });
 
+    firmsData = formatFirmsData(firmsData);
+  };
+  
   return firmsData;
 };
 
-export async function formatFirmsData(country) {
-  const firmsData = await fetchFirmsData(country);
-
+function formatFirmsData(firmsData) {
   let firmsPoints = [];
-  if (firmsData.length > 0) {
 
-    for (let i = 0; i < firmsData.length; i++) {
-      const { source, data } = firmsData[i];
+  for (let i = 0; i < firmsData.length; i++) {
+    const { source, data } = firmsData[i];
 
-      for (let i = 0; i < data.length; i++) {
-        const rawHotSpot = (data[i] += `,${source}`).split(",");
+    for (let i = 0; i < data.length; i++) {
+      const point = data[i].split(",");
 
-        const latitude = parseFloat(rawHotSpot[1]);
-        const longitude = parseFloat(rawHotSpot[2]);
-        const hour = parseInt(rawHotSpot[7].padStart(4, "0").substring(0, 2));
-        const satellite = rawHotSpot[rawHotSpot.length - 1];
+      const latitude = parseFloat(point[1]);
+      const longitude = parseFloat(point[2]);
+      const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
 
-        /** Fire Radiative Power */
-        const frp = parseFloat(rawHotSpot[13]);
+      /** Fire Radiative Power */
+      const frp = parseFloat(point[13]);
 
-        firmsPoints.push({
-          latitude,
-          longitude,
-          satellite,
-          hour,
-          frp,
-        });
-      };
+      firmsPoints.push({
+        latitude,
+        longitude,
+        source,
+        hour,
+        frp,
+      });
     };
   };
 
-  if (firmsPoints.length > 0) firmsPoints = sortFirmsPoints(firmsPoints);
-
-  return firmsPoints;
+  return sortFirmsPoints(firmsPoints);
 };
 
 function sortFirmsPoints(firmsPoints) {
