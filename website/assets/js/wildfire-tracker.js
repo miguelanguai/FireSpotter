@@ -43,16 +43,12 @@ async function fetchFirmsData(country) {
   let firmsData = [];
 
   const source = "VIIRS_NOAA20_NRT";
-  try {
-    const csvResponse = await fetch(firmsURL(source, country));
-    const txtResponse = await csvResponse.text();
-    let data = txtResponse.trim().split("\n").slice(1);
 
-    firmsData.push({ source, data });
-  }
-  catch (error) {
-    console.error(`Firms API ${source} Error: `, error);
-  };
+  const csvResponse = await fetch(firmsURL(source, country));
+  const txtResponse = await csvResponse.text();
+  let data = txtResponse.trim().split("\n").slice(1);
+
+  firmsData.push({ source, data });
 
   return firmsData;
 };
