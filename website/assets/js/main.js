@@ -17,12 +17,12 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
 
       let points;
 
-      const localPoints = localStorage.getItem("points");
-      if (localPoints === null) {
+      const storedPoints = sessionStorage.getItem("points");
+      if (storedPoints === null) {
         points = await fetchFirmsData(country.abbreviation);
-        localStorage.setItem("points", JSON.stringify(points));
+        sessionStorage.setItem("points", JSON.stringify(points));
       }
-      else points = JSON.parse(localPoints);
+      else points = JSON.parse(storedPoints);
   
       if (
         (points.hotSpots !== undefined && points.hotSpots.length > 0) ||
@@ -41,12 +41,12 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
               let weatherData;
 
               const key = `[${latitude},${longitude}]`;
-              const localWeatherData = localStorage.getItem(key);
-              if (localWeatherData === null) {
+              const storedWeatherData = sessionStorage.getItem(key);
+              if (storedWeatherData === null) {
                 weatherData = await fetchOpenWeatherData(latitude, longitude);
-                localStorage.setItem(key, JSON.stringify(weatherData));
+                sessionStorage.setItem(key, JSON.stringify(weatherData));
               }
-              else weatherData = JSON.parse(localWeatherData);
+              else weatherData = JSON.parse(storedWeatherData);
 
               const {
                 windDeg,
