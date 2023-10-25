@@ -36,7 +36,7 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
             const points = pointsType[i];
             
             for (let i = 0; i < points.length; i++) {
-              const { latitude, longitude, hour, source, frp } = points[i];
+              const { latitude, longitude, hour, source, } = points[i];
               
               let weatherData;
 
@@ -63,18 +63,13 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
               const toolTip = `
                 <h4>${nearbyCity}</h4>
                 <hr>
+                <p>Source: ${source}</p>
                 <p>Prediction: ${
                   type
-                    .replace(/(?:^|\s)./g, match => match.toUpperCase())
-                    .replace(/([A-Z])/g, ' $1').trim()
+                  .replace(/(?:^|\s)./g, match => match.toUpperCase())
+                  .replace(/([A-Z])/g, ' $1')
                 }</p>
-                <p>Source: ${source}</p>
-                <p>Fire Radiative Power: ${frp}</p>
-                <p>Fire propagation: ${Math.round(firePropagation)} meters</p>
-                <p>latitude: ${latitude}</p>
-                <p>longitude: ${longitude}</p>
-                <p>Wind degrees: ${windDeg} degrees</p>
-                <p>Wind speed: ${windSpeed} meters/sec</p>
+                <p><strong>Propagation: ${Math.round(firePropagation)} meters/hour</strong></p>
               `;
     
               L.marker([latitude, longitude], { icon: redIcon })
@@ -88,7 +83,5 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
       }
     };
   } 
-  catch (error) {
-    console.error('Error:', error);
-  }
+  catch (error) {console.error('Error:', error);}
 })();
