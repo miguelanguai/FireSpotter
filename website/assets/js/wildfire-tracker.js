@@ -163,14 +163,14 @@ export async function fetchOpenWeatherData(latitude, longitude) {
 export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
   const temp_min = 173.15,
     temp_max = 373.15;
-    
-  /** Constante en base 1 de la temperatura */ 
+
+  /** Temperature-dependent constant in base unit */
   const kTemp = (((temp - temp_min) / (temp_max - temp_min)) * (1 - 0.1)) + 0.1;
 
-  /** Factor inverso de la humedad. Si la humendad es 100%, kHum = 0. */
+  /** Inverse humidity factor. If humidity is 100%, kHum = 0 */
   const kHum = (100 - humidity) / 100;
 
-  /** Porcentaje de terreno rural en España */ 
+  /** Rural land factor */
   const kTerr = 0.5;
 
   let kFuelIndex = -1; if (hour >= 6 && hour <= 19) kFuelIndex = hour - 6;
