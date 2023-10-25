@@ -13,13 +13,20 @@ const firmsURL = (source, country = "ESP", date) => {
     date = `${year}-${month}-${day}`;
   };
 
-  return `https://firms.modaps.eosdis.nasa.gov/api/country/csv/8b8845657503cd8c75f8b4a0a7f8b177/${source}/${country}/1/${date}`;
+  const apiPath = "https://firms.modaps.eosdis.nasa.gov/api/country/csv";
+  const apiKey = "8b8845657503cd8c75f8b4a0a7f8b177";
+
+  return apiPath + `/${apiKey}/${source}/${country}/1/${date}`;
 };
 
 /** URL for retrieving weather data based on latitude and longitude coordinates
  * from OPEN WEATHER API. */
-const openWeatherURL = (lat, lon) =>
-  `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=efd53a1ca3bae9d1aae362ddf19cbbeb`;
+const openWeatherURL = (lat, lon) => {
+  const apiPath = "https://api.openweathermap.org/data/2.5/weather";
+  const apiKey = "efd53a1ca3bae9d1aae362ddf19cbbeb";
+  
+  return apiPath + `?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+};
 
 /** 0 = North, 1 = South, 2 = West, 3 = East */
 const flammability = [
@@ -121,7 +128,7 @@ function sortFirmsPoints(firmsPoints) {
       if (count > 0) {
         const checkState = isFire();
 
-        if ((wrap.length >= 4 && checkState) || checkState) 
+        if ((wrap.length >= 4 && checkState) || checkState)
           fires[fireCount++] = wrap;
         else hotSpots[hotSpotCount++] = wrap;
         
@@ -181,19 +188,19 @@ export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
   else if (windDeg > 90 && windDeg < 180) kFc = kFcPrima(90); 
   else if (windDeg > 180 && windDeg < 270) kFc  = kFcPrima(180); 
   else if (windDeg > 270 && windDeg < 360) kFc = kFcPrima(270);
-  else if (windDeg === 45 || windDeg === 135 || windDeg === 225 || windDeg === 315) 
-    kFc = 0.5; 
+  else if (windDeg === 45 || windDeg === 135 || windDeg === 225 || windDeg === 315)
+    kFc = 0.5;
   else kFc = 1;
 
-  const kFuelPrima = (cardinalPoint) => 
+  const kFuelPrima = (cardinalPoint) =>
     kFc * (kFuelIndex === -1 ? 1 : flammability[kFuelIndex][cardinalPoint]);
 
-  /** kFuel = kFc * flammability */ 
-  let kFuel; 
-  if (windDeg > 45 && windDeg < 135) kFuel = kFuelPrima(2); 
-  else if (windDeg > 135 && windDeg < 225) kFuel = kFuelPrima(0); 
+  /** kFuel = kFc * flammability */
+  let kFuel;
+  if (windDeg > 45 && windDeg < 135) kFuel = kFuelPrima(2);
+  else if (windDeg > 135 && windDeg < 225) kFuel = kFuelPrima(0);
   else if (windDeg > 225 && windDeg < 315) kFuel = kFuelPrima(3);
-  else if (windDeg > 315 && windDeg < 45) kFuel = kFuelPrima(1); 
+  else if (windDeg > 315 && windDeg < 45) kFuel = kFuelPrima(1);
   else kFuel = kFc;
 
   return (windSpeed * 3600 * kFc * kHum * kTerr * kTemp * kFuel);
