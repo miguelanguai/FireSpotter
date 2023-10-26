@@ -1,22 +1,25 @@
 // Creates a map
 export const map = L.map('map', {
   zoomControl: false
-}).setView([40.41831, -3.70275], 6);
+}).setView([40.41831, -3.70275], 6); //map viewing starts in Iberic Peninsula
 
 // Sets the limit of the map
 const southWest = L.latLng(-85, -180);
 const northEast = L.latLng(85, 180);
 const bounds = L.latLngBounds(southWest, northEast);
+//map is no longer loaded after these limits (althouth user can move "in grey map")
 
-// Adds a real map layer
+// Adds a real map layer from openstreetmap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 20,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  //div of atttribution. It's under the white fixed bottom div
   bounds,
   noWrap: true
 }).addTo(map);
 
 let currentLocationIsShown = false;
+//this variable is at first initialized as false (because we start looking at Iberic Peninsula)
 function showCurrentLocation() {
   if ("geolocation" in navigator && currentLocationIsShown == false) {
     navigator.geolocation.getCurrentPosition(function (position) {
