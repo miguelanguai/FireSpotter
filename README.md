@@ -39,6 +39,8 @@ Next, an example is presented:
 
 - Deg = 150º [NW Direction]
 
+![image](https://github.com/miguelanguai/FireSpotter/assets/147279879/ad18cc96-c357-4b6e-866a-c4423c7f73c1)
+
 If Deg - deflection is between 45º and 90º:
 
 $k_Fc' = (((Deg-deflection) - 45) * 0.01111 + 0.5)$
@@ -83,3 +85,26 @@ Where:
 ### WindSpeed
 
 WindSpeed: Wind speed in m/s. This is why it is multiplied by 3600 to obtain the value in m/h.
+
+# OTHER FIRMS FEATURES
+
+## Data
+
+We have been using the FIRMS API, which provides us with some data, including:
+  - FRP (Fire Radiative Power), which helps us distinguish between hot spots and actual fires, as sometimes the app may identify false alarms.
+
+**VIIRS (Visible Infrared Imaging Radiometer Suite):**
+
+- VIIRS is an instrument on board the Suomi National Polar-orbiting Partnership (Suomi NPP) satellite, as well as subsequent satellites in the Joint Polar Satellite System (JPSS) program.
+- It measures a wide range of environmental variables, including cloud cover, sea surface temperature, vegetation health, and more, by observing the Earth in a variety of spectral bands.
+- VIIRS provides high-quality, high-resolution imagery and data, making it valuable for climate monitoring, weather forecasting, and environmental research.
+
+**MODIS (Moderate Resolution Imaging Spectroradiometer):**
+
+- MODIS is an instrument on board NASA's Terra and Aqua satellites, which are part of the Earth Observing System (EOS) program.
+- It provides observations in multiple spectral bands and at various spatial resolutions, allowing it to monitor a wide array of Earth's processes and phenomena.
+- MODIS data is widely used in remote sensing and Earth science research, contributing to studies related to land cover, ocean properties, atmospheric composition, and more.
+- MODIS has been a key tool in monitoring changes in the Earth's climate and environment over time.
+
+These two technologies are the ones that NASA uses to detect thermal anomalies.
+
