@@ -21,7 +21,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let currentLocationIsShown = false;
 //this variable is at first initialized as false (because we start looking at Iberic Peninsula)
 function showCurrentLocation() {
+  //this function puts user where he/she is on the map (when button is activated)
   if ("geolocation" in navigator && currentLocationIsShown == false) {
+    //this gets the current position of the user using geoLocation (if this is activated)
     navigator.geolocation.getCurrentPosition(function (position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
@@ -32,7 +34,10 @@ function showCurrentLocation() {
       currentLocationIsShown = true;
     });
   } else if (currentLocationIsShown == true) {
+      //if currentLocation is being shown, the map puts the view on the initial view
+    alert("You have already shown your location");
     map.setView([40.41831, -3.70275], 6);
+    //the currentLocationIsShown becomes false
     currentLocationIsShown = false;
   }
   else {
@@ -40,7 +45,7 @@ function showCurrentLocation() {
   };
 };
 
-// Create a custom red icon marker
+// Create a custom red icon marker for active fires
 export const redIcon = L.icon({
   iconUrl: "assets/img/fueguito.png",
   iconSize: [25, 41],
@@ -50,6 +55,7 @@ export const redIcon = L.icon({
 });
 
 // Adds a event listener to the button
+//when button is pressed, it activates showCurrentLocation function
 const getLocationButton = document.getElementById("getLocationButton");
 getLocationButton.addEventListener("click", showCurrentLocation);
 
