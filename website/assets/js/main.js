@@ -39,7 +39,9 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
           const points = pointsType[i];
           
           for (let i = 0; i < points.length; i++) {
-            const { abbreviation, latitude, longitude, hour, source, frp } = points[i];
+            const {
+              abbreviation, latitude, longitude, hour, source, frp
+            } = points[i];
 
             let weatherData;
 
@@ -76,7 +78,9 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
                 .replace(/(?:^|\s)./g, match => match.toUpperCase())
                 .replace(/([A-Z])/g, ' $1')
               }</p>
-              <p><strong>Propagation: ${Math.round(firePropagation)} meters/hour</strong></p>
+              <p><strong>Propagation: ${
+                Math.round(firePropagation)
+              } meters/hour</strong></p>
               <p>Radiative Power: ${frp}</p>
             `;
   
