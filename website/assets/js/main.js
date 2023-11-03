@@ -12,21 +12,21 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
 
     const country = countries.find(country => country.name === "Spain");
 
-    if (country !== undefined) {
+    if (country) {
       map.setView(country.coordinates, 5);
 
       let points;
 
-      const storedPoints = sessionStorage.getItem("points");
-      if (storedPoints === null) {
+      const storedPoints = getWithTTL("points");
+      if (!storedPoints) {
         points = await fetchFirmsData(country.abbreviation);
-        sessionStorage.setItem("points", JSON.stringify(points));
+        setWithTTL("points", JSON.stringify(points));
       }
-      else points = JSON.parse(storedPoints);
+      else points = storedPoints;
   
       if (
-        (points.hotSpots !== undefined && points.hotSpots.length > 0) ||
-        (points.fires !== undefined && points.fires.length > 0)
+        (points.hotSpots && points.hotSpots.length > 0) ||
+        (points.fires && points.fires.length > 0)
       )
       {
         for (const type in points) {
@@ -36,17 +36,17 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
             const points = pointsType[i];
             
             for (let i = 0; i < points.length; i++) {
-              const { latitude, longitude, hour, source, } = points[i];
+              const { latitude, longitude, hour, source, frp } = points[i];
               
               let weatherData;
 
               const key = `[${latitude},${longitude}]`;
-              const storedWeatherData = sessionStorage.getItem(key);
-              if (storedWeatherData === null) {
+              const storedWeatherData = getWithTTL(key);
+              if (!storedWeatherData) {
                 weatherData = await fetchOpenWeatherData(latitude, longitude);
-                sessionStorage.setItem(key, JSON.stringify(weatherData));
+                setWithTTL(key, JSON.stringify(weatherData));
               }
-              else weatherData = JSON.parse(storedWeatherData);
+              else weatherData = storedWeatherData;
 
               const {
                 windDeg,
@@ -70,13 +70,16 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
                   .replace(/([A-Z])/g, ' $1')
                 }</p>
                 <p><strong>Propagation: ${Math.round(firePropagation)} meters/hour</strong></p>
+                <p>Radiative Power: ${frp}</p>
               `;
     
               L.marker([latitude, longitude], { icon: redIcon })
                 .addTo(map)
                 .bindTooltip(toolTip);
     
-              drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePropagation);
+              drawLinesWithSecondaryLines(
+                latitude, longitude, windDeg, firePropagation
+              );
             }
           }
         }
@@ -85,3 +88,30 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
   } 
   catch (error) {console.error('Error:', error);}
 })();
+
+function setWithTTL(key, content, ttl = 300) {
+  const now = new Date();
+  ttl *= 1000;
+
+  const value = {
+    content,
+    expiry: now.getTime() + ttl,
+  };
+
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+function getWithTTL(key) {
+  let value = null;
+  const rawValue = localStorage.getItem(key);
+
+  if (rawValue) {
+    const {content, expiry} = JSON.parse(rawValue);
+    const now = new Date();
+    
+    if (expiry && now.getTime() > expiry) localStorage.removeItem(key);
+    else value = JSON.parse(content);
+  };
+  
+  return value;
+};
