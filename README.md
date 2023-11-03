@@ -108,3 +108,21 @@ We have been using the FIRMS API, which provides us with some data, including:
 
 These two technologies are the ones that NASA uses to detect thermal anomalies.
 
+# FUTURE FOLLOWING PATH 
+
+## LiDAR TECHNOLOGY
+
+In a future scenario, FireSpotter is planned to use LIDAR sensor data to generate a 3D map of hazardous areas. To achieve this, it will use coordinates provided by the FIRMS API, along with LIDAR data, to create a cartographic map of the fire's point of origin, as the DEMO shown below:
+
+![image](https://github.com/miguelanguai/FireSpotter/assets/147279879/8e7df625-6b71-4cd9-8de8-df2e02db1276)
+
+Then it will place the fire as depicted in the following image:
+
+![image](https://github.com/miguelanguai/FireSpotter/assets/147279879/75613040-1dd4-4034-ab32-260e5e650871)
+
+
+Finally, it will generate a 3D fire cone to visualize the actual area it could affect.
+![image](https://github.com/miguelanguai/FireSpotter/assets/147279879/893a6d49-7500-4274-8584-6a9d39d9928e)
+
+
+With this feature, hopefully we could add the third dimension to our algorithm.
