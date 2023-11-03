@@ -73,6 +73,7 @@ function formatFirmsData(firmsData) {
     for (let i = 0; i < data.length; i++) {
       const point = data[i].split(",");
 
+      const abbreviation = point[0];
       const latitude = parseFloat(point[1]);
       const longitude = parseFloat(point[2]);
       const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
@@ -81,6 +82,7 @@ function formatFirmsData(firmsData) {
       const frp = parseFloat(point[13]);
 
       firmsPoints.push({
+        abbreviation,
         latitude,
         longitude,
         source,
