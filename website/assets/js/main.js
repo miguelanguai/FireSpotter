@@ -10,21 +10,21 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
   const countries = await rawCountries.json();
 
   const country = countries.find(country => country.name === "Spain");
-  const abbreviation = country.abbreviation;
-
   if (country) {
-    map.setView(country.coordinates, 5);
+    const { abbreviation, name, coordinates } = country;
+
+    map.setView(coordinates, 5);
 
     let points;
 
-    const storedPoints = getWithTTL("points");
+    const storedPoints = getWithTTL(name);
     if (
       storedPoints &&
       storedPoints.abbreviation === abbreviation
-    ) points = storedPoints
+    ) points = storedPoints.points;
     else {
       points = await fetchFirmsData(abbreviation);
-      setWithTTL("points", JSON.stringify({points, abbreviation}));
+      setWithTTL(name, JSON.stringify({points, abbreviation}));
     };
 
     if (
