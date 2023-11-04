@@ -46,10 +46,8 @@ const flammability = [
   [1.1, 1.1, 1.3, 1.1],
 ];
 
-export async function fetchFirmsData(country) {
+export async function fetchFirmsData(country, source) {
   let firmsData = [];
-
-  const source = "VIIRS_NOAA20_NRT";
 
   const csvResponse = await fetch(firmsURL(source, country));
   const txtResponse = await csvResponse.text();
