@@ -104,6 +104,11 @@ body {
     text-align: center
 }
 
+#options{
+    display: absolute;
+    right: 80%;
+} /*esto hay que mirarlo bien*/
+
 .DemoCase {
     width: 137px;
     height: 52px;
