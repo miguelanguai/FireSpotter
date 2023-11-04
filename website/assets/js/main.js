@@ -5,11 +5,64 @@ import {
 } from './wildfire-tracker.js';
 import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
 
-(async () => {
+async function main() {
   const rawCountries = await fetch('assets/js/countries.json');
   const countries = await rawCountries.json();
+  const defaultCountry = "Spain";
+  const country = (countryName) =>
+    countries.find(country => country.name === countryName);
 
-  const country = countries.find(country => country.name === "Spain");
+  const sources = [ "VIIRS_NOAA20_NRT", "VIIRS_SNPP_NRT", "MODIS_NRT" ];
+  const defaultSource = sources[0];
+  
+  pointsPrinter(country(defaultCountry), defaultSource);
+
+  const countrySelector = document.getElementById("countrySelector");
+  countries.forEach(country => {
+    // Creates an <option> HTML tag
+    const option = document.createElement("option");
+
+    const name = country.name;
+    option.value = name;
+    option.text = name;
+
+    // Sets a default value
+    if (name === defaultCountry) option.selected = true;
+
+    // Adds <option> to the <select> HTML tag
+    countrySelector.appendChild(option);
+  });
+
+  const sourceSelector = document.getElementById("sourceSelector");
+  sources.forEach(source => {
+    // Creates an <option> HTML tag
+    const option = document.createElement("option");
+
+    option.value = source;
+    option.text = source;
+
+    // Sets a default value
+    if (source === defaultSource) option.selected = true;
+
+    // Adds <option> to the <select> HTML tag
+    sourceSelector.appendChild(option);
+  });
+
+  function printBySelection() {
+    const selectedCountry =
+      countrySelector.options[countrySelector.selectedIndex].value;
+
+    const selectedSource =
+      sourceSelector.options[sourceSelector.selectedIndex].value;
+  
+    pointsPrinter(country(selectedCountry), selectedSource);
+  };
+
+  countrySelector.addEventListener("change", printBySelection);
+  sourceSelector.addEventListener("change", printBySelection);
+};
+
+async function pointsPrinter(country) {
   if (country) {
     const { abbreviation, name, coordinates } = country;
 
@@ -96,7 +149,7 @@ import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
       }
     }
   };
-})();
+};
 
 function setWithTTL(key, content, ttl = 300) {
   const now = new Date();
@@ -124,3 +177,5 @@ function getWithTTL(key) {
   
   return value;
 };
+
+main();
