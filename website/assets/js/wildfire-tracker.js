@@ -199,4 +199,17 @@ export async function pointsPrinter(source, country) {
 
   /** Gets points from FIRMS API */
   const firmsPoints = await fetchFirmsData(source, abbreviation);
+
+  /** Adding weather info for each FIRMS point */
+  const forecastData = await Promise.all(firmsPoints.map(async point => {
+    // Data from FIRMS
+    const { latitude, longitude } = point;
+
+    /** Get weather from OpenWeather API for each location */
+    const openWeatherData = await fetchOpenWeatherData(latitude, longitude);
+
+    return { ...point, ...openWeatherData};
+  }));
+
+  console.log(forecastData);
 }
