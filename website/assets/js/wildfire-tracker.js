@@ -210,7 +210,26 @@ export async function pointsPrinter(source, country) {
 
     return { ...point, ...openWeatherData};
   }));
-
-  // Sort points by near locations
+  
+  // Wrap points by near locations
+  let bigWrap = [];
+  let cityWrap = [];
+  let lastKey = "";
   forecastData.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
-}
+  for (const i = 0; i < forecastData.length;) {
+    const {nearbyCity} = forecastData[i];
+    
+    if (lastKey !== nearbyCity) {
+      if (lastKey) {
+        bigWrap.push(cityWrap);
+        
+        cityWrap = [];
+      };
+      lastKey = nearbyCity;
+    };
+    
+    cityWrap.push(forecastData.shift());
+  };
+
+  console.log({bigWrap});
+};
