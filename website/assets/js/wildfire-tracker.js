@@ -55,40 +55,27 @@ export async function fetchFirmsData(source, country) {
   const txtResponse = await csvResponse.text();
   let data = txtResponse.trim().split("\n").slice(1);
 
-  if (data.length > 0) firmsData = { source, country, data };
+  if (data.length > 0)
+    firmsData = { source, country, data: formatFirmsData(data) };
   
   return firmsData;
 };
 
+/** Filter useful data from FIRMS */
 function formatFirmsData(firmsData) {
-  let firmsPoints = [];
+  return firmsData.map(data => {
+    const point = data.split(",");
 
-  for (let i = 0; i < firmsData.length; i++) {
-    const { source, data } = firmsData[i];
+    const abbreviation = point[0];
+    const latitude = parseFloat(point[1]);
+    const longitude = parseFloat(point[2]);
+    const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
 
-    for (let i = 0; i < data.length; i++) {
-      const point = data[i].split(",");
+    /** Fire Radiative Power */
+    const frp = parseFloat(point[13]);
 
-      const abbreviation = point[0];
-      const latitude = parseFloat(point[1]);
-      const longitude = parseFloat(point[2]);
-      const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
-
-      /** Fire Radiative Power */
-      const frp = parseFloat(point[13]);
-
-      firmsPoints.push({
-        abbreviation,
-        latitude,
-        longitude,
-        source,
-        hour,
-        frp,
-      });
-    };
-  };
-
-  return firmsPoints;
+    return {abbreviation, latitude, longitude, hour, frp};
+  });
 };
 
 function sortFirmsPoints(firmsPoints) {
@@ -213,4 +200,6 @@ export async function pointsPrinter(source, country) {
 
   /** Gets points from FIRMS API */
   const firmsPoints = await fetchFirmsData(source, abbreviation);
+
+  console.log(firmsPoints);
 }
