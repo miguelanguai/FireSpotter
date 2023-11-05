@@ -56,7 +56,7 @@ export async function fetchFirmsData(source, country) {
   let data = txtResponse.trim().split("\n").slice(1);
 
   if (data.length > 0)
-    firmsData = { source, country, data: formatFirmsData(data) };
+    firmsData = formatFirmsData(data);
   
   return firmsData;
 };
@@ -66,7 +66,6 @@ function formatFirmsData(firmsData) {
   return firmsData.map(data => {
     const point = data.split(",");
 
-    const abbreviation = point[0];
     const latitude = parseFloat(point[1]);
     const longitude = parseFloat(point[2]);
     const hour = parseInt(point[7].padStart(4, "0").substring(0, 2));
@@ -74,7 +73,7 @@ function formatFirmsData(firmsData) {
     /** Fire Radiative Power */
     const frp = parseFloat(point[13]);
 
-    return {abbreviation, latitude, longitude, hour, frp};
+    return {latitude, longitude, hour, frp};
   });
 };
 
@@ -200,6 +199,4 @@ export async function pointsPrinter(source, country) {
 
   /** Gets points from FIRMS API */
   const firmsPoints = await fetchFirmsData(source, abbreviation);
-
-  console.log(firmsPoints);
 }
