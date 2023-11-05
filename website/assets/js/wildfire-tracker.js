@@ -210,14 +210,21 @@ export async function pointsPrinter(source, country) {
 
     return { ...point, ...openWeatherData};
   }));
-  
-  // Wrap points by near locations
+
+  const points = wrapPoints(forecastData);
+  console.log(points);
+};
+
+/** Wrap points by near locations */
+function wrapPoints(points) {
+  points.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
+
   let bigWrap = [];
   let cityWrap = [];
   let lastKey = "";
-  forecastData.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
-  for (const i = 0; i < forecastData.length;) {
-    const {nearbyCity} = forecastData[i];
+  do {
+    const point = points.shift();
+    const nearbyCity = point.nearbyCity;
     
     if (lastKey !== nearbyCity) {
       if (lastKey) {
@@ -228,8 +235,8 @@ export async function pointsPrinter(source, country) {
       lastKey = nearbyCity;
     };
     
-    cityWrap.push(forecastData.shift());
-  };
-
-  console.log({bigWrap});
+    cityWrap.push(point);
+  } while (points.length);
+  
+  return bigWrap;
 };
