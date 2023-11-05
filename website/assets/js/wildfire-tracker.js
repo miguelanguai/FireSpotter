@@ -1,3 +1,5 @@
+import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
+
 /**
  * URL for retrieving CSV data from the NASA FIRMS API for a specific date.
  * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current
@@ -205,3 +207,11 @@ export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
 
   return (windSpeed * 3600 * kFc * kHum * kTerr * kTemp * kFuel);
 };
+
+export async function pointsPrinter(source, country) {
+  // Gets all properties of `country`
+  const { abbreviation, name, coordinates } = country;
+
+  // Moves map focus to the coordinates of the country
+  map.setView(coordinates, 5);
+}
