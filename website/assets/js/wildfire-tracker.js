@@ -49,17 +49,13 @@ const flammability = [
 ];
 
 export async function fetchFirmsData(source, country) {
-  let firmsData = [];
+  let firmsData = {};
 
   const csvResponse = await fetch(firmsURL(source, country));
   const txtResponse = await csvResponse.text();
   let data = txtResponse.trim().split("\n").slice(1);
 
-  if (data.length > 0) {
-    firmsData.push({ source, data });
-
-    firmsData = formatFirmsData(firmsData);
-  };
+  if (data.length > 0) firmsData = { source, country, data };
   
   return firmsData;
 };
@@ -92,7 +88,7 @@ function formatFirmsData(firmsData) {
     };
   };
 
-  return sortFirmsPoints(firmsPoints);
+  return firmsPoints;
 };
 
 function sortFirmsPoints(firmsPoints) {
@@ -214,4 +210,7 @@ export async function pointsPrinter(source, country) {
 
   // Moves map focus to the coordinates of the country
   map.setView(coordinates, 5);
+
+  /** Gets points from FIRMS API */
+  const firmsPoints = await fetchFirmsData(source, abbreviation);
 }
