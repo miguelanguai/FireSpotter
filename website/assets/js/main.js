@@ -80,11 +80,7 @@ async function pointsPrinter(source, country) {
       setWithTTL(name, JSON.stringify({points, abbreviation}));
     };
 
-    if (
-      (points.hotSpots && points.hotSpots.length > 0) ||
-      (points.fires && points.fires.length > 0)
-    )
-    {
+    if (points.hotSpots && points.fires) {
       for (const type in points) {
         const pointsType = points[type];
   
