@@ -219,7 +219,10 @@ export async function pointsPrinter(source, country) {
 function wrapPoints(points) {
   points.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
 
-  let bigWrap = [];
+  let hotSpotCount = 0;
+  let fireCount = 0;
+  let hotSpots = [];
+  let fires = [];
   let cityWrap = [];
   let lastKey = "";
   do {
@@ -228,7 +231,8 @@ function wrapPoints(points) {
     
     if (lastKey !== nearbyCity) {
       if (lastKey) {
-        bigWrap.push(cityWrap);
+        if (areFires(cityWrap)) fires[fireCount++] = cityWrap;
+        else hotSpots[hotSpotCount++] = cityWrap;
         
         cityWrap = [];
       };
@@ -238,5 +242,21 @@ function wrapPoints(points) {
     cityWrap.push(point);
   } while (points.length);
   
-  return bigWrap;
+  return {fires, hotSpots};
+};
+
+/** 
+ * A group of points with at least 1 point
+ * which FRP is higher than 10 are fires
+*/
+function areFires(points) {
+  let areFires = false;
+
+  for (let i = 0; !areFires && i < points.length; i++) {
+    const {frp} = points[i];
+
+    if (frp > 10) areFires = true;
+  };
+
+  return areFires;
 };
