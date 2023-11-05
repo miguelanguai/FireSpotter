@@ -15,7 +15,7 @@ async function main() {
   const sources = [ "VIIRS_NOAA20_NRT", "VIIRS_SNPP_NRT", "MODIS_NRT" ];
   const defaultSource = sources[0];
   
-  pointsPrinter(country(defaultCountry), defaultSource);
+  pointsPrinter(defaultSource, country(defaultCountry));
 
   const countrySelector = document.getElementById("countrySelector");
   countries.forEach(country => {
@@ -55,14 +55,14 @@ async function main() {
     const selectedSource =
       sourceSelector.options[sourceSelector.selectedIndex].value;
   
-    pointsPrinter(country(selectedCountry), selectedSource);
+    pointsPrinter(selectedSource, country(selectedCountry));
   };
 
   countrySelector.addEventListener("change", printBySelection);
   sourceSelector.addEventListener("change", printBySelection);
 };
 
-async function pointsPrinter(country) {
+async function pointsPrinter(source, country) {
   if (country) {
     const { abbreviation, name, coordinates } = country;
 
@@ -76,7 +76,7 @@ async function pointsPrinter(country) {
       storedPoints.abbreviation === abbreviation
     ) points = storedPoints.points;
     else {
-      points = await fetchFirmsData(abbreviation);
+      points = await fetchFirmsData(source, abbreviation);
       setWithTTL(name, JSON.stringify({points, abbreviation}));
     };
 

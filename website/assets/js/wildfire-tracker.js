@@ -3,7 +3,7 @@
  * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current
  * day.
 */
-const firmsURL = (source, country = "ESP", date) => {
+const firmsURL = (source, country, date) => {
   if (date === undefined) {
     const today = new Date();
     const year = today.getFullYear();
@@ -46,7 +46,7 @@ const flammability = [
   [1.1, 1.1, 1.3, 1.1],
 ];
 
-export async function fetchFirmsData(country, source) {
+export async function fetchFirmsData(source, country) {
   let firmsData = [];
 
   const csvResponse = await fetch(firmsURL(source, country));
