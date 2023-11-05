@@ -211,5 +211,6 @@ export async function pointsPrinter(source, country) {
     return { ...point, ...openWeatherData};
   }));
 
-  console.log(forecastData);
+  // Sort points by near locations
+  forecastData.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
 }
