@@ -1,58 +1,15 @@
-/**
- * URL for retrieving CSV data from the NASA FIRMS API for a specific date.
- * @param [date] - "YYYY-MM-DD". If none is provided, it will be the current
- * day.
-*/
-const firmsURL = (source, country, date) => {
-  if (date === undefined) {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-
-    date = `${year}-${month}-${day}`;
-  };
-
+/** Retrieves CSV data from the NASA FIRMS API
+ * for a specific source and country */
+async function fetchFirmsData(source, countryAbbreviation) {
   const apiPath = "https://firms.modaps.eosdis.nasa.gov/api/country/csv";
   const apiKey = "8b8845657503cd8c75f8b4a0a7f8b177";
+  const apiUrl = apiPath + `/${apiKey}/${source}/${countryAbbreviation}/1`;
 
-  return apiPath + `/${apiKey}/${source}/${country}/1/${date}`;
-};
-
-/** URL for retrieving weather data based on latitude and longitude coordinates
- * from OPEN WEATHER API. */
-const openWeatherURL = (lat, lon) => {
-  const apiPath = "https://api.openweathermap.org/data/2.5/weather";
-  const apiKey = "efd53a1ca3bae9d1aae362ddf19cbbeb";
-  
-  return apiPath + `?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-};
-
-/** 0 = North, 1 = South, 2 = West, 3 = East */
-const flammability = [
-  [1.1, 1.1, 1.1, 1.1],
-  [1.1, 1.1, 1.1, 1.2],
-  [1.1, 1.1, 1.1, 1.3],
-  [1.2, 1.1, 1.1, 1.4],
-  [1.26, 1.25, 1.2, 1.25],
-  [1.1, 1.5, 1.3, 1.15],
-  [1.15, 1.85, 1.4, 1.1],
-  [1.18, 2, 1.5, 1.26],
-  [1.2, 1.85, 1.6, 1.2],
-  [1.1, 1.5, 1.7, 1.1],
-  [1.1, 1.25, 1.8, 1.1],
-  [1.1, 1.1, 1.7, 1.1],
-  [1.1, 1.1, 1.5, 1.1],
-  [1.1, 1.1, 1.3, 1.1],
-];
-
-export async function fetchFirmsData(source, country) {
-  let firmsData = {};
-
-  const csvResponse = await fetch(firmsURL(source, country));
+  const csvResponse = await fetch(apiUrl);
   const txtResponse = await csvResponse.text();
   let data = txtResponse.trim().split("\n").slice(1);
-
+  
+  let firmsData = {};
   if (data.length > 0)
     firmsData = formatFirmsData(data);
   
@@ -75,62 +32,14 @@ function formatFirmsData(firmsData) {
   });
 };
 
-function sortFirmsPoints(firmsPoints) {
-  let count = 0;
-  let hotSpotCount = 0;
-  let fireCount = 0;
-  let hotSpots = [];
-  let fires = [];
-  let wrap = [];
-  let lastKey = "";
+/** Retrieves weather data based on latitude and longitude coordinates
+ * from OPEN WEATHER API. */
+async function fetchOpenWeatherData(latitude, longitude) {
+  const apiPath = "https://api.openweathermap.org/data/2.5/weather";
+  const apiKey = "efd53a1ca3bae9d1aae362ddf19cbbeb";
+  const apiUrl = apiPath + `?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
 
-  /**
-   * Checks if there is any point with a FRP greater than 10.
-   * @returns Boolean value indicating if the wrapped points are fires.
-   */
-  function isFire() {
-    let isFire = false;
-
-    for (let i = 0; !isFire && i < wrap.length; i++)
-      if (wrap[i].frp > 10) isFire = true;
-      
-    return isFire;
-  }
-
-  firmsPoints.sort((a, b) => a.latitude - b.latitude).map(point => {
-    const { latitude, longitude } = point;
-
-    const roundedLat = Math.floor(latitude * 10) / 10;
-    const roundedLong = Math.floor(longitude * 10) / 10;
-    
-    // Unique key
-    const key = `${roundedLat},${roundedLong}`;
-
-    if (key !== lastKey) {
-      if (count > 0) {
-        const checkState = isFire();
-
-        if ((wrap.length >= 4 && checkState) || checkState)
-          fires[fireCount++] = wrap;
-        else hotSpots[hotSpotCount++] = wrap;
-        
-        wrap = [];
-        count = 0;
-      };
-
-      count++;
-      lastKey = key;
-    };
-
-    // Adds a new entry to the group
-    wrap.push(point);
-  });
-
-  return { hotSpots, fires };
-};
-
-export async function fetchOpenWeatherData(latitude, longitude) {
-  const response = await fetch(openWeatherURL(latitude, longitude));
+  const response = await fetch(apiUrl);
   const openWeatherData = await response.json();
 
   const windDeg = openWeatherData.wind.deg;
@@ -142,7 +51,25 @@ export async function fetchOpenWeatherData(latitude, longitude) {
   return { windDeg, windSpeed, windGust, temp, humidity, nearbyCity };
 };
 
-export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
+function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
+  /** 0 = North, 1 = South, 2 = West, 3 = East */
+  const flammability = [
+    [1.1, 1.1, 1.1, 1.1],
+    [1.1, 1.1, 1.1, 1.2],
+    [1.1, 1.1, 1.1, 1.3],
+    [1.2, 1.1, 1.1, 1.4],
+    [1.26, 1.25, 1.2, 1.25],
+    [1.1, 1.5, 1.3, 1.15],
+    [1.15, 1.85, 1.4, 1.1],
+    [1.18, 2, 1.5, 1.26],
+    [1.2, 1.85, 1.6, 1.2],
+    [1.1, 1.5, 1.7, 1.1],
+    [1.1, 1.25, 1.8, 1.1],
+    [1.1, 1.1, 1.7, 1.1],
+    [1.1, 1.1, 1.5, 1.1],
+    [1.1, 1.1, 1.3, 1.1],
+  ];
+  
   const temp_min = 173.15,
     temp_max = 373.15;
 
@@ -188,15 +115,8 @@ export function propagationAlgorithm(temp, humidity, windDeg, windSpeed, hour) {
   return (windSpeed * 3600 * kFc * kHum * kTerr * kTemp * kFuel);
 };
 
-export async function pointsPrinter(source, country) {
-  /** Country abbreviation by FIRMS API */
-  const abbreviation = country.abbreviation;
-
-  /** Gets points from FIRMS API */
-  const firmsPoints = await fetchFirmsData(source, abbreviation);
-
-  /** Adding weather info for each FIRMS point */
-  const forecastData = await Promise.all(firmsPoints.map(async point => {
+async function getForecastData(points) {
+  return Promise.all(points.map(async point => {
     // Data from FIRMS
     const { latitude, longitude } = point;
 
@@ -205,9 +125,6 @@ export async function pointsPrinter(source, country) {
 
     return { ...point, ...openWeatherData};
   }));
-
-  const points = wrapPoints(forecastData);
-  console.log(points);
 };
 
 /** Points are wrapped by near locations
@@ -269,4 +186,17 @@ function areFires(points) {
   };
 
   return areFires;
+};
+
+export async function pointsTracker(source, countryAbbreviation) {
+  /** Gets points from FIRMS API */
+  const firmsPoints = await fetchFirmsData(source, countryAbbreviation);
+
+  /** Adding weather info for each FIRMS point */
+  const forecastData = await getForecastData(firmsPoints);
+
+  /** Group points by nearby city and type */
+  const points = wrapPoints(forecastData);
+
+  return points;
 };
