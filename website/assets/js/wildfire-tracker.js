@@ -225,8 +225,8 @@ function wrapPoints(points) {
   let fires = [];
   let cityWrap = [];
   let lastKey = "";
-  do {
-    const point = points.shift();
+  for (let i = 0; i < points.length; i++) {
+    const point = points[i];
     const nearbyCity = point.nearbyCity;
     
     if (lastKey !== nearbyCity) {
@@ -235,11 +235,11 @@ function wrapPoints(points) {
           // Calculate Fire Propagation before pushing to `Fires`
           fires[fireCount++] = cityWrap.map(fire => {
             const {temp, humidity, windDeg, windSpeed, hour} = fire;
-
+  
             fire.propagation = propagationAlgorithm(
               temp, humidity, windDeg, windSpeed, hour
             );
-
+  
             return fire;
           });
         else hotSpots[hotSpotCount++] = cityWrap;
@@ -250,7 +250,7 @@ function wrapPoints(points) {
     };
     
     cityWrap.push(point);
-  } while (points.length);
+  };
   
   return {fires, hotSpots};
 };
