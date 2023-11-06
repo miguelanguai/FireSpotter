@@ -22,7 +22,6 @@ body{
   position: absolute;
   top: 0;
   right: 0;
-  
 }
 #webImg{
   width: 140px;
@@ -72,6 +71,12 @@ body{
   background-color: blue;
   color: white;
 }
+#selectorContainer {
+  padding: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 /*clases*/
 
 /*media*/
@@ -80,10 +85,20 @@ body{
     overflow: hidden;
   }
   #scale{
-    bottom: 110%;
-    left: 5%;
+    bottom: 7rem;
+    left: 35%;
   }
   #selfPosition{
     right: 20%;
+  }
+  #logoNasa, #logoWeb{
+    top: unset;
+  }
+  #logoNasa {
+    bottom: 6rem;
+  }
+  #logoWeb {
+    bottom: 5rem;
+    scale: 0.85;
   }
 }

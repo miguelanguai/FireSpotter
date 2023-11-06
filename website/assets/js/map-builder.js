@@ -1,7 +1,9 @@
 // Creates a map
 export const map = L.map('map', {
   zoomControl: false
-}).setView([40.41831, -3.70275], 6);
+});
+
+export const countryMarker = L.layerGroup().addTo(map);
 
 // Sets the limit of the map
 const southWest = L.latLng(-85, -180);
@@ -10,7 +12,7 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 // Adds a real map layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 20,
+  maxZoom: 19,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   bounds,
   noWrap: true
@@ -78,7 +80,7 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
     longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadians);
 
   // Dawns the fire propagation into the map
-  L.polyline([startPoint, [endLat, endLng]], { color: 'purple' }).addTo(map);
+  L.polyline([startPoint, [endLat, endLng]], { color: 'purple' }).addTo(countryMarker);
 
   // Draws 200 lines anti-horary way based on the wind degrees.
   let direction = 1;
@@ -95,7 +97,7 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
     const endLngSide =
       longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSide);
     const lineCoordinatesSide = [startPoint, [endLatSide, endLngSide]];
-    L.polyline(lineCoordinatesSide, { color: lineColor, weight: 0.25 }).addTo(map);
+    L.polyline(lineCoordinatesSide, { color: lineColor, weight: 0.25 }).addTo(countryMarker);
 
     // Restart the loop counter to print lines in the other side.
     if (i === 100) {
