@@ -3,6 +3,8 @@ export const map = L.map('map', {
   zoomControl: false
 });
 
+export const countryMarker = L.layerGroup().addTo(map);
+
 // Sets the limit of the map
 const southWest = L.latLng(-85, -180);
 const northEast = L.latLng(85, 180);
