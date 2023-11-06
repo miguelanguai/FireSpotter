@@ -9,7 +9,7 @@ async function fetchFirmsData(source, countryAbbreviation) {
   const txtResponse = await csvResponse.text();
   let data = txtResponse.trim().split("\n").slice(1);
   
-  let firmsData = {};
+  let firmsData = [];
   if (data.length > 0)
     firmsData = formatFirmsData(data);
   
