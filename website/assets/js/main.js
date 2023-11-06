@@ -1,13 +1,60 @@
 import { pointsTracker } from './wildfire-tracker.js';
-import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
+import { redIcon, map, countryMarker, drawLinesWithSecondaryLines } from './map-builder.js';
 
 async function pointsPrinter(source, country) {
   const { abbreviation, name, coordinates } = country;
+
+  countryMarker.clearLayers();
+
+  map.setView(coordinates, 6);
+
+  let trackedPoints;
+  const key = `${name}, ${source}`;
+  const storedPoints = getWithTTL(key);
+  if (storedPoints) trackedPoints = storedPoints;
+  else {
+    trackedPoints = await pointsTracker(source, abbreviation);
+    setWithTTL(key, JSON.stringify(trackedPoints));
+  };
+
+  for (const type in trackedPoints) {
+    for (const points of trackedPoints[type]) {
+      for (const point of points) {
+        const {
+          nearbyCity, frp, propagation, latitude, longitude, windDeg, windSpeed
+        } = point;
+
+        const isFire = type === 'fires';
   
-  const points = await pointsTracker(source, abbreviation);
+        const toolTip =
+          `<h4>${nearbyCity}</h4>` +
+          "<hr>" +
+          "<p>Prediction: " + type
+            .replace(/(?:^|\s)./g, match => match.toUpperCase())
+            .replace(/([A-Z])/g, ' $1').trim() + "</p>" +
+          `<p>Source: ${source}</p>` +
+          `<p>Radiative Power: ${frp}</p>`+
+          (isFire ? "<p>Fire propagation: " +
+          propagation.toFixed(2) + " meters</p>" : '') +
+          `<p>latitude: ${latitude}</p>` +
+          `<p>longitude: ${longitude}</p>` +
+          `<p>Wind degrees: ${windDeg} degrees</p>` +
+          `<p>Wind speed: ${windSpeed} meters/sec</p>` +
+        '';
   
-  console.log(points);
-}
+        const pointMarker = L.marker([latitude, longitude], { icon: redIcon })
+          .bindTooltip(toolTip);
+
+        countryMarker.addLayer(pointMarker);
+
+        if (isFire) 
+          drawLinesWithSecondaryLines(
+            latitude, longitude, windDeg, propagation
+          );
+      }
+    }
+  };
+};
 
 function setWithTTL(key, content, ttl = 300) {
   const now = new Date();
