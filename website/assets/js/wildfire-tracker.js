@@ -231,7 +231,17 @@ function wrapPoints(points) {
     
     if (lastKey !== nearbyCity) {
       if (lastKey) {
-        if (areFires(cityWrap)) fires[fireCount++] = cityWrap;
+        if (areFires(cityWrap))
+          // Calculate Fire Propagation before pushing to `Fires`
+          fires[fireCount++] = cityWrap.map(fire => {
+            const {temp, humidity, windDeg, windSpeed, hour} = fire;
+
+            fire.propagation = propagationAlgorithm(
+              temp, humidity, windDeg, windSpeed, hour
+            );
+
+            return fire;
+          });
         else hotSpots[hotSpotCount++] = cityWrap;
         
         cityWrap = [];
