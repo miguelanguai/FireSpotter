@@ -80,7 +80,7 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
     longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadians);
 
   // Dawns the fire propagation into the map
-  L.polyline([startPoint, [endLat, endLng]], { color: 'purple' }).addTo(map);
+  L.polyline([startPoint, [endLat, endLng]], { color: 'purple' }).addTo(countryMarker);
 
   // Draws 200 lines anti-horary way based on the wind degrees.
   let direction = 1;
@@ -97,7 +97,7 @@ export function drawLinesWithSecondaryLines(latitude, longitude, windDeg, firePr
     const endLngSide =
       longitude + (firePropagation / (111320 * Math.cos(latitude * (Math.PI / 180)))) * Math.sin(orientationRadiansSide);
     const lineCoordinatesSide = [startPoint, [endLatSide, endLngSide]];
-    L.polyline(lineCoordinatesSide, { color: lineColor, weight: 0.25 }).addTo(map);
+    L.polyline(lineCoordinatesSide, { color: lineColor, weight: 0.25 }).addTo(countryMarker);
 
     // Restart the loop counter to print lines in the other side.
     if (i === 100) {
