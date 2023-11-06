@@ -215,7 +215,12 @@ export async function pointsPrinter(source, country) {
   console.log(points);
 };
 
-/** Wrap points by near locations */
+/** Points are wrapped by near locations
+ * and filtered by the following conditions:
+ * - A group of points with at least 1 fire, is considered as a group of fires
+ *    - Fire propagation is calculated for each one
+ * - Other points are considered as hot spots
+*/
 function wrapPoints(points) {
   points.sort((a, b) => a.nearbyCity.localeCompare(b.nearbyCity));
 
