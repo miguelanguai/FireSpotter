@@ -1,9 +1,45 @@
 import { pointsTracker } from './wildfire-tracker.js';
 import { redIcon, map, drawLinesWithSecondaryLines } from './map-builder.js';
 
+async function pointsPrinter(source, country) {
+  const { abbreviation, name, coordinates } = country;
+  
+  const points = await pointsTracker(source, abbreviation);
+  
+  console.log(points);
+}
+
+function setWithTTL(key, content, ttl = 300) {
+  const now = new Date();
+  ttl *= 1000;
+
+  const value = {
+    content,
+    expiry: now.getTime() + ttl,
+  };
+
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
+function getWithTTL(key) {
+  let value = null;
+  const rawValue = localStorage.getItem(key);
+
+  if (rawValue) {
+    const {content, expiry} = JSON.parse(rawValue);
+    const now = new Date();
+    
+    if (expiry && now.getTime() > expiry) localStorage.removeItem(key);
+    else value = JSON.parse(content);
+  };
+  
+  return value;
+};
+
 async function main() {
   const rawCountries = await fetch('assets/js/countries.json');
   const countries = await rawCountries.json();
+  
   const defaultCountry = "Spain";
   const country = (countryName) =>
     countries.find(country => country.name === countryName);
@@ -57,40 +93,4 @@ async function main() {
   countrySelector.addEventListener("change", printBySelection);
   sourceSelector.addEventListener("change", printBySelection);
 };
-
-async function pointsPrinter(source, country) {
-  const { abbreviation, name, coordinates } = country;
-  
-  const points = await pointsTracker(source, abbreviation);
-  
-  console.log(points);
-}
-
-function setWithTTL(key, content, ttl = 300) {
-  const now = new Date();
-  ttl *= 1000;
-
-  const value = {
-    content,
-    expiry: now.getTime() + ttl,
-  };
-
-  localStorage.setItem(key, JSON.stringify(value));
-};
-
-function getWithTTL(key) {
-  let value = null;
-  const rawValue = localStorage.getItem(key);
-
-  if (rawValue) {
-    const {content, expiry} = JSON.parse(rawValue);
-    const now = new Date();
-    
-    if (expiry && now.getTime() > expiry) localStorage.removeItem(key);
-    else value = JSON.parse(content);
-  };
-  
-  return value;
-};
-
 main();
