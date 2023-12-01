@@ -2,26 +2,69 @@
 
 /*ESTO ES UNA COPIA DE STYLES INDEX QUE VOY A MODIFICAR PARA QUE FUNCIONE EN NEW INDEX.HTML
 */
-body {
-    margin: 40px 0 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: #26718f;
-}
+
 /*a partir de aqui las etiquetas nuevas*/
-#leftSide{
-    position: absolute;
-    left: 0;
-    width: 50%;
+/*Elements*/
+html {
+	box-sizing: border-box;
 }
-#rightSide{
-    position: absolute;
-    right: 0;
-    width: 50%;
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
 }
+
+body {
+	font-family: 'Inter', sans-serif;
+	background-color: #26718f;
+}
+/*elements*/
+h1 {
+	color: #F4A261;
+	text-align: center;
+}
+h2,h3{
+	color: #F4A261;
+	text-align: center;
+}
+
+p{
+	color: #E9C46A;
+}
+a{
+	color: #F4A261;
+}
+/*pseudo-classes*/
+a:hover{
+	color: white;
+}
+ul{
+	list-style: none;
+}
+li{
+	color: #F4A261;
+}
+/*classes*/
+.regularText1, .freeAppLaunch{
+	color: #264653;
+}
+section[class^="leftSide"]{
+	width: 50%;
+	padding: 2%;
+}
+section[class^="rightSide"]{
+	width: 50%;
+	padding: 2%;
+	/*this background-color is just for testing*/
+	background-color: green;
+	
+}
+
 
 
 /*a partir de aqui las etiquetas antiguas*/
+/*
 .centered-content {
     position: relative;
     text-align: center;
@@ -124,7 +167,7 @@ body {
     display: absolute;
     right: 80%;
 } /*esto hay que mirarlo bien*/
-
+/*
 .DemoCase {
     width: 137px;
     height: 52px;
