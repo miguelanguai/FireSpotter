@@ -22,12 +22,13 @@
 		<section class="pannel1">
 			<section class="leftSide1">
 				<h1 class="title">FIRESPOTTER</h1>
-				<h1 class="title">Spot the fire, Anytime, Anywhere!</h1>
-				<p class="regularText">Your Ultimate Fire Forecasting
-					App.<!--hasta aqui cambio de color--> Stay sharp, stay safe.
-					Predicting the future, one fire at a time.</p>
+				<h2 class="subtitle">Spot the fire, Anytime, Anywhere!</h2>
+				<p class="regularText1">Your Ultimate Fire Forecasting
+					App.<!--hasta aqui cambio de color--> </p>
+					<p class="slogan">Stay sharp, stay safe.
+						Predicting the future, one fire at a time.</p>
 				<div id="tryAndExp">
-					<div id="tryButton">
+					<div id="tryLink">
 						<a href="map.html">Try me now</a>
 					</div>
 					<div id="freeAppLaunch">
@@ -37,33 +38,33 @@
 			</section>
 			<section class="rightSide1">
 				<div id="linksToSamePage">
-					<div id="teamLink" class="linksToSamePage">
-						<a href="newIndex.html#team">Team</a>
-					</div>
-					<div id="appFunctionsLink" class="linksToSamePage">
-						<a href="newIndex.html#appFunctions">App Functions</a>
-					</div>
-					<div id="demoLink" class="linksToSamePage">
-						<a href="newIndex.html#demo">Demo</a>
-					</div>
+					<ul class="linksList">
+						<li>
+							<a href="newIndex.html#team">Team</a>
+						</li>
+						<li>
+							<a href="newIndex.html#appFunctions">App Functions</a>
+						</li>
+						<li>
+							<a href="newIndex.html#demo">Demo</a>
+						</li>
+					</ul>
 				</div>
 				<div id="logoCont">
 					<img src="assets/img/logoAdri.png" alt="projectLogo">
 				</div>
-				<div id="orangeSubtitle">
-					<p>
-						Your Fire Safety Starts Here
-					</p>
+				<div>
+					<h3>Your Fire Safety Starts Here</h3>
 				</div>
-				<div id="anotherLink">
+				<div class="tryLink">
 					<a href="map.html">Try FireSpotter today!</a>
 				</div>
 			</section>
 		</section>
 		<section class="pannel2">
 			<section class="leftSide2">
-				<h2 class="sectionTitle" id="teamTitle">Team</h2>
-				<p class="regularText" id="teamExplanation">
+				<h2 class="sectionTitle">Team</h2>
+				<p class="teamDescription">
 					Meet Juande Team : We are a group of passionate innovators,
 					engineers, and developers working tirelessly to keep you
 					ahead of the flames. We're committed to making your safety
@@ -73,7 +74,7 @@
 				</p>
 			</section>
 			<section class="rightSide2">
-				<div id="teamMembersPhoto">
+				<div class="teamMembersPhoto">
 					<img src="assets/img/groupPhoto.png" alt="this is a picture
                     of our team members">
 				</div>
@@ -83,61 +84,67 @@
 			<section class="leftSide3">
 				<div id="explanationList">
 					<div class="listElement">
-						<p>
-							1.- Advanced Fire Prediction: Our Team has developed
-							an algorithim that show us the fire path according
-							to some forecast variables.
-						</p>
-					</div>
-					<div class="listElement">
-						<p>
-							2.- Real Time Monitoring: We use the FIRMS API data,
-							to spot the fire and locate it in real time.
 
-						</p>
-					</div>
-					<div class="listElement">
-						<p>
-							3.- Working: When a fire shows up on FIRESPOTTER,
-							our algorithm creates a fire propagation cone, with
-							some colors:
-						</p>
-					</div>
+						<ol>
+							<li>
+								<section>
+									<h3>Advanced Fire Prediction</h3>
+									<p>Our Team has developed
+										an algorithim that show us the fire path according
+										to some forecast variables.</p>
+								</section>
+							</li>
+							<li>
+								<section>
+									<h3>Real Time Monitoring</h3>
+									<p>We use the FIRMS API data,
+										to spot the fire and locate it in real time.</p>
+								</section>
+							</li>
+							<li>
+								<section>
+									<h3>Working</h3>
+									<p>When a fire shows up on FIRESPOTTER,
+										our algorithm creates a fire propagation cone, with
+										some colors
+									</p>
+								</section>
+							</li>
+						</ol>
 				</div>
 				<div id="percentageGrid">
-					<div class="gridElement">
-						<div class="colorDiv"></div>
-						<p class="regularText">High pathing percentage [90-100]
-						</p>
-					</div>
-					<div class="gridElement">
-						<div class="colorDiv"></div>
-						<p class="regularText">Medium-High pathing percentage
-							[80-90]
-						</p>
-					</div>
-					<div class="gridElement">
-						<div class="colorDiv"></div>
-						<p class="regularText">Medium pathing percentage [70-80]
-						</p>
-					</div>
-					<div class="gridElement">
-						<div class="colorDiv"></div>
-						<p class="regularText">Medium-Low pathing percentage
-							[60-70]
-						</p>
-					</div>
-					<div class="gridElement">
-						<div class="colorDiv"></div>
-						<p class="regularText">Low pathing percentage [50-60]
-						</p>
-					</div>
+
+					<ul>
+						<li>
+							<div class="color"></div>
+							<p>High pathing percentage [90-100]</p>
+						</li>
+						<li>
+							<div class="color"></div>
+							<p>Medium-High pathing percentage
+								[80-90]</p>
+						</li>
+						<li>
+							<div class="color"></div>
+							<p>Medium pathing percentage [70-80]</p>
+						</li>
+						<li>
+							<div class="color"></div>
+							<p>Medium-Low pathing percentage
+								[60-70]</p>
+						</li>
+						<li>
+							<div class="color">Low pathing percentage [50-60]</div>
+							<p></p>
+						</li>
+					</ul>
+
 				</div>
 			</section>
 			<section class="rightSide3">
 				<h2 class="sectionTitle" id="appFunctionsTitle">App
 					Functions</h2>
-				<div id="appFunctionsImage">
+				<div>
 					<img src="assets/img/caseDessign.png" alt="this is a picture
                     of the design of the interphace">
 				</div>
@@ -157,9 +164,9 @@
 				</p>
 			</section>
 			<section class="leftSide">
-				<div id="imagesDemoCaseExplanation">
-					<p>This is a demo case, that shows us how Firespotter
-						predicts the fire path.</p>
+				<div>
+					<h3>This is a demo case, that shows us how Firespotter
+						predicts the fire path.</h3>
 				</div>
 				<div id="bothImagesDemoCase">
 					<img src="assets/img/simulatedCase.png" alt="first image in
