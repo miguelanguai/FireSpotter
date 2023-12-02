@@ -17,7 +17,8 @@ html {
 
 body {
 	font-family: 'Inter', sans-serif;
-	background-color: #26718f;
+	background-color: #264653;
+    display: block;
 }
 /*elements*/
 h1 {
@@ -56,11 +57,24 @@ section[class^="leftSide"]{
 section[class^="rightSide"]{
 	width: 50%;
 	padding: 2%;
-	/*this background-color is just for testing*/
-	background-color: green;
-	
 }
-
+section[class^="pannel"]{
+    display: flex;
+}
+.pannel1 .leftSide{
+    background-color: #2E7270;
+}
+.rightSide3, .pannel4 .leftSide{
+    background-color: #2a9d8f;
+}
+.linksList li{
+    display: inline;
+}
+.tryLink{
+    display: flex;
+    justify-content: center;
+    background-color: #F4A261;
+}
 
 
 /*a partir de aqui las etiquetas antiguas*/
