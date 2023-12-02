@@ -70,10 +70,13 @@ section[class^="pannel"]{
 .linksList li{
     display: inline;
 }
+.logoCont{
+    display: flex;
+    justify-content: center;
+}
 .tryLink{
     display: flex;
     justify-content: center;
-    background-color: #F4A261;
 }
 
 
