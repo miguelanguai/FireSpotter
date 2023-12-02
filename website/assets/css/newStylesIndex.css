@@ -67,6 +67,11 @@ section[class^="pannel"]{
 .rightSide3, .pannel4 .leftSide{
     background-color: #2a9d8f;
 }
+.linksList{
+    display: flex;
+    justify-content: right;
+}
+
 .linksList li{
     display: inline;
 }
@@ -78,7 +83,10 @@ section[class^="pannel"]{
     display: flex;
     justify-content: center;
 }
-
+li .color{
+    background-color: red;
+    margin: 1px;
+}
 
 /*a partir de aqui las etiquetas antiguas*/
 /*
