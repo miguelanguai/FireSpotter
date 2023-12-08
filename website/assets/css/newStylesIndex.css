@@ -19,6 +19,7 @@ body {
 	font-family: 'Inter', sans-serif;
 	background-color: #264653;
     display: block;
+    font-size: 45px;
 }
 /*elements*/
 h1 {
@@ -60,6 +61,7 @@ section[class^="rightSide"]{
 }
 section[class^="pannel"]{
     display: flex;
+    height: 100rem;
 }
 .pannel1 .leftSide{
     background-color: #2E7270;
