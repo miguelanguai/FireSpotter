@@ -25,14 +25,21 @@ body {
 h1 {
 	color: #F4A261;
 	text-align: center;
+    font-size: 10rem;
 }
-h2,h3{
+h2{
+	color: #F4A261;
+	text-align: center;
+    font-size: 8rem;
+}
+h3{
 	color: #F4A261;
 	text-align: center;
 }
 
-p{
+p, span{
 	color: #E9C46A;
+    font-size: 4rem;
 }
 a{
 	color: #F4A261;
@@ -61,7 +68,7 @@ section[class^="rightSide"]{
 }
 section[class^="pannel"]{
     display: flex;
-    height: 100rem;
+    height: 150rem;
 }
 .pannel1 .leftSide{
     background-color: #2E7270;
@@ -89,6 +96,24 @@ li .color{
     background-color: red;
     margin: 1px;
 }
+.tryAndExp{
+    margin: 100px 0;
+    align-items: center;
+}
+.tryAndExp a{
+    background-color: #264653;
+    width: 33%;
+    padding: 45px;
+    text-align: center;
+    border-radius: 15px;
+}
+.tryAndExp p{
+    text-align: center;
+    font-size: 3rem;
+}
+
+
+
 
 /*a partir de aqui las etiquetas antiguas*/
 /*
