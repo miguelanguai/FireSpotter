@@ -35,6 +35,7 @@ h2{
 h3{
 	color: #F4A261;
 	text-align: center;
+    font-size: 7rem;
 }
 
 p, span{
@@ -43,6 +44,7 @@ p, span{
 }
 a{
 	color: #F4A261;
+    font-weight: bold;
 }
 /*pseudo-classes*/
 a:hover{
@@ -78,7 +80,8 @@ section[class^="pannel"]{
 }
 .linksList{
     display: flex;
-    justify-content: right;
+    justify-content: center;
+    padding: 20px 0;
 }
 
 .linksList li{
@@ -96,6 +99,7 @@ li .color{
     background-color: red;
     margin: 1px;
 }
+/*pannel 1 left*/
 .tryAndExp{
     margin: 100px 0;
     align-items: center;
@@ -111,8 +115,17 @@ li .color{
     text-align: center;
     font-size: 3rem;
 }
-
-
+/*pannel1 right*/
+.linksList li{
+    margin: 0 75px;
+    
+}
+.logoCont{
+    padding:  200px 0;
+}
+.logoCont img{
+    height: 1250px;
+}
 
 
 /*a partir de aqui las etiquetas antiguas*/
