@@ -66,7 +66,6 @@ section[class^="leftSide"]{
 }
 section[class^="rightSide"]{
 	width: 50%;
-	padding: 2%;
 }
 section[class^="pannel"]{
     display: flex;
@@ -81,7 +80,7 @@ section[class^="pannel"]{
 .linksList{
     display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 40px 0;
 }
 
 .linksList li{
@@ -125,6 +124,16 @@ li .color{
 }
 .logoCont img{
     height: 1250px;
+}
+
+/*pannel2 right*/
+
+.rightSide2{
+    padding: 0;
+}
+.rightSide2 img{
+  height: 100%;
+  width: 100%;
 }
 
 
