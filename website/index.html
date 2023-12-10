@@ -1,57 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>FireSpotter</title>
-  <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
-  <link rel="icon" href="assets/img/logoFirefighter.ico" type="image/x-icon">
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  ></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home - FireSpotter</title>
+	<link href="https://fonts.cdnfonts.com/css/inter" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/newStylesIndex.css">
 </head>
+
 <body>
-  <div id="map"></div>
 
-  <div id="logoNasa">
-  <a href="https://www.spaceappschallenge.org/2023/find-a-team/juandeteam/"
-  target="_blank" rel="noopener noreferrer">
-    <img src="assets/img/nasa_logo.png" alt="NASA logo" id="nasaImg">
-  </a>
-  </div>
+	<header>
 
-  <div id="logoWeb">
-  <img src="assets/img/logoFirefighter.png" alt="Web logo" id="webImg">
-  </div>
+	</header>
 
-  <div id="lowIcons">
-  <div id="caption">
-    <img src="assets/img/leyendaColores.png" alt="Explanation of color
-    probabilities" id="captionImage">
-  </div>
-  <div id="scale">
-    <!-- It might be a transparent color -->
-  </div>
-  <div id="selfPosition">
-    <!-- Switches between current position and default position -->
-    <button id="getLocationButton">Get position</button>
-  </div>
-  </div>
+	<nav>
 
-  <div id="selectorContainer">
-    <select id="countrySelector" name="countrySelector"></select>
-    <select id="sourceSelector" name="sourceSelector"></select>
-  </div>
+	</nav>
 
-  <script type="module" src="assets/js/main.js"></script>
+	<main>
+		<section class="pannel1">
+			<section class="leftSide">
+				<h1>FIRESPOTTER</h1>
+				<h2>Spot the fire, Anytime, Anywhere!</h2>
+				<span class="regularText1">Your Ultimate Fire Forecasting App.</span>
+				<span class="slogan">Stay sharp, stay safe. Predicting the future, one fire
+				at a time.</span>
+				<div class="tryAndExp">
+					<div class="tryLink">
+						<a href="map.html">Try me now</a>
+					</div>
+						<p>Free App Launch</p>
+				</div>
+			</section>
+			<section class="rightSide">
+				<div id="linksToSamePage">
+					<ul class="linksList">
+						<li>
+							<a href="newIndex.html#team">Team</a>
+						</li>
+						<li>
+							<a href="newIndex.html#appFunctions">App Functions</a>
+						</li>
+						<li>
+							<a href="newIndex.html#demo">Demo</a>
+						</li>
+					</ul>
+				</div>
+				<div class="logoCont">
+					<img src="assets/img/logoAdri.png" alt="projectLogo">
+				</div>
+				<div>
+					<h3>Your Fire Safety Starts Here</h3>
+				</div>
+				<div class="tryLink">
+					<a href="map.html">Try FireSpotter today!</a>
+				</div>
+			</section>
+		</section>
+		<section class="pannel2">
+			<section class="leftSide2">
+				<h2 class="sectionTitle">Team</h2>
+				<p>
+					Meet Juande Team : We are a group of passionate innovators, engineers,
+					and developers working tirelessly to keep you ahead of the flames.
+					We're committed to making your safety our priority, one innovative
+					feature at a time. Together, we're redefining fire prediction. Trust
+					in FireSpotter, trust in our team.
+				</p>
+			</section>
+			<section class="rightSide2">
+					<img src="assets/img/groupPhoto.png" alt="this is a picture of our
+					team members" width="80%">
+			</section>
+		</section>
+		<section class="pannel3">
+			<section class="leftSide3">
+				<div id="explanationList">
+					<div class="listElement">
+
+						<ol>
+							<li>
+								<section>
+									<h4>Advanced Fire Prediction</h4>
+									<p>Our Team has developed an algorithim that show us the fire
+									path according to some forecast variables.</p>
+								</section>
+							</li>
+							<li>
+								<section>
+									<h4>Real Time Monitoring</h4>
+									<p>We use the FIRMS API data, to spot the fire and locate it
+									in real time.</p>
+								</section>
+							</li>
+							<li>
+								<section>
+									<h4>Working</h4>
+									<p>When a fire shows up on FIRESPOTTER, our algorithm creates
+									a fire propagation cone, with some colors
+									</p>
+								</section>
+							</li>
+						</ol>
+						<br>
+					</div>
+					<div class="percentageGrid">
+						<ul>
+							<li>
+								<div class="color"></div>
+								<p>High pathing percentage [90-100]</p>
+							</li>
+							<li>
+								<div class="color"></div>
+								<p>Medium-High pathing percentage [80-90]</p>
+							</li>
+							<li>
+								<div class="color"></div>
+								<p>Medium pathing percentage [70-80]</p>
+							</li>
+							<li>
+								<div class="color"></div>
+								<p>Medium-Low pathing percentage [60-70]</p>
+							</li>
+							<li>
+								<div class="color"></div>
+								<p>Low pathing percentage [50-60]</p>
+							</li>
+						</ul>
+
+					</div>
+			</section>
+			<section class="rightSide3">
+				<h2 class="sectionTitle" id="appFunctionsTitle">App Functions</h2>
+				<div>
+					<img src="assets/img/caseDessign.png" alt="this is a picture of the
+					design of the interphace">
+				</div>
+			</section>
+		</section>
+		<section class="pannel4">
+			<section class="leftSide">
+				<h2 class="sectionTitle" id="demoCaseTitle">Demo Case</h2>
+				<p>
+					In August 2023, Tenerife Island faced a devastating wildfire,
+					devouring nearly 7,000 hectares.
+				</p>
+				<p>
+					This is a demo case, and the image speaks volumes. The fire
+					propagation cone blankets nearly 70% of the fire footprint, showcasing
+					the remarkable strength of this tool.
+				</p>
+			</section>
+			<section class="rightSide">
+				<div>
+					<h3>This is a demo case, that shows us how Firespotter predicts the
+					fire path.</h3>
+				</div>
+				<div id="bothImagesDemoCase">
+					<img src="assets/img/simulatedCase.png" alt="first image in the
+					example">
+					<img src="assets/img/realWildfire.png" alt="second image in the
+					example">
+				</div>
+			</section>
+		</section>
+	</main>
+
+	<footer>
+
+	</footer>
+
+
+
 </body>
+
 </html>
